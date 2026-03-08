@@ -1,4 +1,4 @@
-const CACHE_NAME = "fat-loss-log-v5";
+const CACHE_NAME = "fat-loss-log-v20260308-1";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -6,72 +6,58 @@ const APP_SHELL = [
 ];
 
 self.addEventListener("install", (event) => {
+  self.skipWaiting();
   event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then((cache) => cache.addAll(APP_SHELL))
-      .then(() => self.skipWaiting())
+    caches.open(CACHE_NAME).then((cache) => cache.addAll(APP_SHELL)).catch(() => {})
   );
 });
 
 self.addEventListener("activate", (event) => {
-  event.waitUntil((async () => {
-    const keys = await caches.keys();
-    await Promise.all(
-      keys.map((key) => {
-        if (key !== CACHE_NAME) {
-          return caches.delete(key);
-        }
-        return Promise.resolve();
-      })
-    );
-    await self.clients.claim();
-  })());
+  event.waitUntil(
+    (async () => {
+      const keys = await caches.keys();
+      await Promise.all(
+        keys
+          .filter((key) => key !== CACHE_NAME)
+          .map((key) => caches.delete(key))
+      );
+      await self.clients.claim();
+    })()
+  );
 });
 
 self.addEventListener("fetch", (event) => {
-  if (event.request.method !== "GET") return;
+  const request = event.request;
+  if (request.method !== "GET") return;
 
-  const url = new URL(event.request.url);
+  const url = new URL(request.url);
 
-  if (event.request.mode === "navigate") {
-    event.respondWith(networkFirst(event.request, "./index.html"));
+  if (request.mode === "navigate" || request.destination === "document") {
+    event.respondWith(
+      fetch(request)
+        .then((response) => {
+          const copy = response.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put("./index.html", copy)).catch(() => {});
+          return response;
+        })
+        .catch(() => caches.match("./index.html").then((cached) => cached || caches.match("./")))
+    );
     return;
   }
 
-  if (url.origin === self.location.origin) {
-    event.respondWith(cacheFirst(event.request));
+  if (url.origin !== self.location.origin) {
+    return;
   }
+
+  event.respondWith(
+    caches.match(request).then((cached) => {
+      if (cached) return cached;
+      return fetch(request).then((response) => {
+        if (!response || response.status !== 200) return response;
+        const copy = response.clone();
+        caches.open(CACHE_NAME).then((cache) => cache.put(request, copy)).catch(() => {});
+        return response;
+      });
+    })
+  );
 });
-
-async function networkFirst(request, fallbackUrl) {
-  try {
-    const response = await fetch(request);
-    const cache = await caches.open(CACHE_NAME);
-    cache.put(request, response.clone());
-
-    const reqUrl = new URL(request.url);
-    if (reqUrl.pathname.endsWith("/") || reqUrl.pathname.endsWith("/index.html")) {
-      cache.put("./index.html", response.clone());
-    }
-
-    return response;
-  } catch (error) {
-    const cached = await caches.match(request);
-    if (cached) return cached;
-
-    const fallback = await caches.match(fallbackUrl);
-    if (fallback) return fallback;
-
-    throw error;
-  }
-}
-
-async function cacheFirst(request) {
-  const cached = await caches.match(request);
-  if (cached) return cached;
-
-  const response = await fetch(request);
-  const cache = await caches.open(CACHE_NAME);
-  cache.put(request, response.clone());
-  return response;
-}
