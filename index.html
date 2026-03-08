@@ -389,7 +389,86 @@
       font-size: 13px;
       line-height: 1.6;
     }
+.chart-shell {
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: linear-gradient(180deg, #fff 0%, #f8fbff 100%);
+  padding: 12px;
+  overflow: hidden;
+}
 
+.chart-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.chart-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.chart-subtitle {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.chart-legend {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.chart-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.chart-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  flex: 0 0 10px;
+}
+
+.chart-dot-weight {
+  background: #2563eb;
+}
+
+.chart-dot-carb {
+  background: #f59e0b;
+}
+
+.chart-canvas-wrap {
+  width: 100%;
+  overflow-x: auto;
+}
+
+#trendChart {
+  display: block;
+  width: 100%;
+  height: 320px;
+  border-radius: 12px;
+  background: #ffffff;
+}
+
+.chart-empty {
+  border: 1px dashed var(--line);
+  border-radius: 14px;
+  padding: 24px 16px;
+  text-align: center;
+  color: var(--muted);
+  background: #fff;
+  line-height: 1.7;
+}
     .history-list {
       display: grid;
       gap: 10px;
@@ -616,6 +695,41 @@
       </div>
     </section>
 
+<section class="card">
+  <div class="section-head">
+    <h2>趋势图</h2>
+    <p>同一张图中查看体重与实际碳水变化。X 轴为日期，左轴为体重，右轴为碳水。</p>
+  </div>
+
+  <div class="chart-shell">
+    <div class="chart-head">
+      <div>
+        <p class="chart-title">体重 / 实际碳水趋势</p>
+        <p class="chart-subtitle">蓝线 = 体重（kg），橙线 = 实际碳水（g）</p>
+      </div>
+
+      <div class="chart-legend">
+        <span class="chart-legend-item">
+          <span class="chart-dot chart-dot-weight"></span>
+          体重（kg）
+        </span>
+        <span class="chart-legend-item">
+          <span class="chart-dot chart-dot-carb"></span>
+          实际碳水（g）
+        </span>
+      </div>
+    </div>
+
+    <div id="chartEmpty" class="chart-empty hidden">
+      暂无足够数据可绘图。<br />
+      请先记录几天体重或实际碳水。
+    </div>
+
+    <div class="chart-canvas-wrap">
+      <canvas id="trendChart" width="920" height="320"></canvas>
+    </div>
+  </div>
+</section>
     <section class="card">
       <div class="section-head">
         <h2>个人信息</h2>
@@ -852,14 +966,17 @@
         updateStorageBadge();
         parseAuthErrorFromUrl();
 
-        if (state.mode === "cloud") {
-          await initCloudMode();
-        } else {
-          state.records = loadLocalRecords();
-          refreshScreen(state.selectedDate);
-          updateAuthCards();
-        }
-      }
+       if (state.mode === "cloud") {
+  await initCloudMode();
+} else {
+  state.records = loadLocalRecords();
+  refreshScreen(state.selectedDate);
+  updateAuthCards();
+}
+
+window.addEventListener("resize", () => {
+  renderTrendChart();
+});
 
       function cacheRefs() {
         refs.todayDateText = document.getElementById("todayDateText");
@@ -919,6 +1036,8 @@
         refs.historyList = document.getElementById("historyList");
         refs.footnote = document.getElementById("footnote");
         refs.statusBar = document.getElementById("statusBar");
+        refs.trendChart = document.getElementById("trendChart");
+        refs.chartEmpty = document.getElementById("chartEmpty");
       }
 
       function bindEvents() {
@@ -1223,16 +1342,17 @@
         renderLiveViews(readFormRecord(), state.profile);
       }
 
-      function renderLiveViews(record, profile) {
-        renderSummaryCards(record, profile);
-        renderTopBadges(record, profile);
-        renderProfileStatus(profile);
-        renderMacroPlanner(record, profile);
-        renderOverviewCards();
-        renderHistoryList();
-        updateActionState();
-        updateFootnote();
-      }
+     function renderLiveViews(record, profile) {
+       renderSummaryCards(record, profile);
+       renderTopBadges(record, profile);
+       renderProfileStatus(profile);
+       renderMacroPlanner(record, profile);
+       renderOverviewCards();
+       renderTrendChart();
+       renderHistoryList();
+       updateActionState();
+       updateFootnote();
+}
 
       function renderSummaryCards(record, profile) {
         const summary = calculateSummary(record, profile);
@@ -1332,7 +1452,334 @@
           refs.avgWeightSub.textContent = `统计区间：最近 7 天，已记录 ${sevenDayStats.count} 天体重`;
         }
       }
+function renderTrendChart() {
+  const canvas = refs.trendChart;
+  const empty = refs.chartEmpty;
+  if (!canvas) return;
 
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return;
+
+  const records = sortRecordsAsc(state.records).filter((record) => {
+    return record.weight != null || record.actualCarb != null;
+  });
+
+  if (records.length === 0) {
+    clearCanvas(ctx, canvas);
+    empty.classList.remove("hidden");
+    canvas.classList.add("hidden");
+    return;
+  }
+
+  empty.classList.add("hidden");
+  canvas.classList.remove("hidden");
+
+  const dpr = window.devicePixelRatio || 1;
+  const cssWidth = canvas.clientWidth || 920;
+  const cssHeight = 320;
+
+  if (canvas.width !== Math.round(cssWidth * dpr) || canvas.height !== Math.round(cssHeight * dpr)) {
+    canvas.width = Math.round(cssWidth * dpr);
+    canvas.height = Math.round(cssHeight * dpr);
+  }
+
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.scale(dpr, dpr);
+  ctx.clearRect(0, 0, cssWidth, cssHeight);
+
+  const padding = {
+    top: 20,
+    right: 52,
+    bottom: 44,
+    left: 52
+  };
+
+  const plotWidth = cssWidth - padding.left - padding.right;
+  const plotHeight = cssHeight - padding.top - padding.bottom;
+
+  if (plotWidth <= 0 || plotHeight <= 0) return;
+
+  const labels = records.map((record) => formatChartDate(record.recordDate));
+  const weightValues = records.map((record) => record.weight);
+  const carbValues = records.map((record) => record.actualCarb);
+
+  const weightRange = buildAxisRange(weightValues, 1.2, 2);
+  const carbRange = buildAxisRange(carbValues, 20, 10);
+
+  drawChartGrid(ctx, {
+    cssWidth,
+    cssHeight,
+    padding,
+    plotWidth,
+    plotHeight,
+    leftRange: weightRange,
+    rightRange: carbRange
+  });
+
+  drawAxisLabels(ctx, {
+    labels,
+    cssWidth,
+    cssHeight,
+    padding,
+    plotWidth,
+    plotHeight,
+    leftRange: weightRange,
+    rightRange: carbRange
+  });
+
+  drawSeries(ctx, {
+    values: weightValues,
+    color: "#2563eb",
+    lineWidth: 2.5,
+    pointsFill: "#2563eb",
+    labels,
+    padding,
+    plotWidth,
+    plotHeight,
+    range: weightRange
+  });
+
+  drawSeries(ctx, {
+    values: carbValues,
+    color: "#f59e0b",
+    lineWidth: 2.5,
+    pointsFill: "#f59e0b",
+    labels,
+    padding,
+    plotWidth,
+    plotHeight,
+    range: carbRange
+  });
+
+  drawAxisTitles(ctx, {
+    cssWidth,
+    cssHeight,
+    padding
+  });
+}
+
+function clearCanvas(ctx, canvas) {
+  const cssWidth = canvas.clientWidth || 920;
+  const cssHeight = 320;
+  ctx.clearRect(0, 0, cssWidth, cssHeight);
+}
+
+function drawChartGrid(ctx, config) {
+  const { padding, plotWidth, plotHeight, leftRange } = config;
+  const gridLines = 5;
+
+  ctx.save();
+  ctx.strokeStyle = "#e5e7eb";
+  ctx.lineWidth = 1;
+
+  for (let i = 0; i <= gridLines; i += 1) {
+    const y = padding.top + (plotHeight / gridLines) * i;
+    ctx.beginPath();
+    ctx.moveTo(padding.left, y);
+    ctx.lineTo(padding.left + plotWidth, y);
+    ctx.stroke();
+  }
+
+  ctx.beginPath();
+  ctx.moveTo(padding.left, padding.top);
+  ctx.lineTo(padding.left, padding.top + plotHeight);
+  ctx.lineTo(padding.left + plotWidth, padding.top + plotHeight);
+  ctx.strokeStyle = "#cbd5e1";
+  ctx.stroke();
+  ctx.restore();
+}
+
+function drawAxisLabels(ctx, config) {
+  const {
+    labels,
+    padding,
+    plotWidth,
+    plotHeight,
+    leftRange,
+    rightRange
+  } = config;
+
+  ctx.save();
+  ctx.fillStyle = "#667085";
+  ctx.font = "12px Inter, sans-serif";
+
+  const gridLines = 5;
+
+  for (let i = 0; i <= gridLines; i += 1) {
+    const ratio = i / gridLines;
+    const y = padding.top + plotHeight * ratio;
+
+    const leftValue = leftRange.max - (leftRange.max - leftRange.min) * ratio;
+    const rightValue = rightRange.max - (rightRange.max - rightRange.min) * ratio;
+
+    ctx.textAlign = "right";
+    ctx.textBaseline = "middle";
+    ctx.fillText(formatAxisValue(leftValue), padding.left - 8, y);
+
+    ctx.textAlign = "left";
+    ctx.fillText(formatAxisValue(rightValue), padding.left + plotWidth + 8, y);
+  }
+
+  const maxLabelCount = Math.min(labels.length, 6);
+  const indexSet = new Set();
+
+  if (labels.length <= maxLabelCount) {
+    labels.forEach((_, index) => indexSet.add(index));
+  } else {
+    for (let i = 0; i < maxLabelCount; i += 1) {
+      const index = Math.round((labels.length - 1) * (i / (maxLabelCount - 1)));
+      indexSet.add(index);
+    }
+  }
+
+  [...indexSet]
+    .sort((a, b) => a - b)
+    .forEach((index) => {
+      const x = getXByIndex(index, labels.length, padding.left, plotWidth);
+      const y = padding.top + plotHeight + 10;
+
+      ctx.textAlign = "center";
+      ctx.textBaseline = "top";
+      ctx.fillText(labels[index], x, y);
+    });
+
+  ctx.restore();
+}
+
+function drawSeries(ctx, config) {
+  const {
+    values,
+    color,
+    lineWidth,
+    pointsFill,
+    labels,
+    padding,
+    plotWidth,
+    plotHeight,
+    range
+  } = config;
+
+  const points = values
+    .map((value, index) => {
+      if (value == null) return null;
+      return {
+        x: getXByIndex(index, labels.length, padding.left, plotWidth),
+        y: getYByValue(value, range.min, range.max, padding.top, plotHeight),
+        value
+      };
+    })
+    .filter(Boolean);
+
+  if (points.length === 0) return;
+
+  ctx.save();
+  ctx.strokeStyle = color;
+  ctx.lineWidth = lineWidth;
+  ctx.lineJoin = "round";
+  ctx.lineCap = "round";
+
+  ctx.beginPath();
+  points.forEach((point, index) => {
+    if (index === 0) {
+      ctx.moveTo(point.x, point.y);
+    } else {
+      ctx.lineTo(point.x, point.y);
+    }
+  });
+  ctx.stroke();
+
+  points.forEach((point) => {
+    ctx.beginPath();
+    ctx.fillStyle = "#fff";
+    ctx.arc(point.x, point.y, 4.5, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.fillStyle = pointsFill;
+    ctx.arc(point.x, point.y, 3, 0, Math.PI * 2);
+    ctx.fill();
+  });
+
+  ctx.restore();
+}
+
+function drawAxisTitles(ctx, config) {
+  const { cssWidth, cssHeight, padding } = config;
+
+  ctx.save();
+  ctx.fillStyle = "#475467";
+  ctx.font = "12px Inter, sans-serif";
+
+  ctx.textAlign = "left";
+  ctx.textBaseline = "top";
+  ctx.fillText("体重（kg）", padding.left, 2);
+
+  ctx.textAlign = "right";
+  ctx.fillText("碳水（g）", cssWidth - padding.right, 2);
+
+  ctx.textAlign = "center";
+  ctx.fillText("日期", cssWidth / 2, cssHeight - 16);
+
+  ctx.restore();
+}
+
+function buildAxisRange(values, paddingValue, minSpan) {
+  const valid = values.filter((value) => value != null && Number.isFinite(value));
+
+  if (valid.length === 0) {
+    return { min: 0, max: minSpan };
+  }
+
+  let min = Math.min(...valid);
+  let max = Math.max(...valid);
+
+  if (min === max) {
+    min -= minSpan / 2;
+    max += minSpan / 2;
+  }
+
+  min -= paddingValue;
+  max += paddingValue;
+
+  if (max - min < minSpan) {
+    const center = (min + max) / 2;
+    min = center - minSpan / 2;
+    max = center + minSpan / 2;
+  }
+
+  return {
+    min,
+    max
+  };
+}
+
+function getXByIndex(index, total, left, width) {
+  if (total <= 1) return left + width / 2;
+  return left + (width * index) / (total - 1);
+}
+
+function getYByValue(value, min, max, top, height) {
+  if (max === min) return top + height / 2;
+  const ratio = (value - min) / (max - min);
+  return top + height - ratio * height;
+}
+
+function sortRecordsAsc(records) {
+  return [...records].sort((a, b) => a.recordDate.localeCompare(b.recordDate));
+}
+
+function formatChartDate(dateString) {
+  const date = parseISODate(dateString);
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${month}-${day}`;
+}
+
+function formatAxisValue(value) {
+  if (!Number.isFinite(value)) return "--";
+  if (Math.abs(value) >= 100) return String(Math.round(value));
+  return value.toFixed(1);
+}
       function renderHistoryList() {
         if (state.mode === "cloud" && !state.session) {
           refs.historyList.innerHTML = `
