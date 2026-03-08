@@ -712,6 +712,7 @@
       }
 
       function cacheRefs() {
+        refs.reloadBtn = document.getElementById("reloadBtn");
         refs.todayDateText = document.getElementById("todayDateText");
         refs.storageBadge = document.getElementById("storageBadge");
         refs.authCard = document.getElementById("authCard");
@@ -769,6 +770,7 @@
           });
         });
 
+        refs.reloadBtn.addEventListener("click", handleReloadCloudData);
         refs.saveBtn.addEventListener("click", handleSave);
         refs.deleteBtn.addEventListener("click", handleDelete);
         refs.sendMagicLinkBtn.addEventListener("click", sendMagicLink);
@@ -1427,3 +1429,23 @@
   </script>
 </body>
 </html>
+async function handleReloadCloudData() {
+  try {
+    if (state.mode !== "cloud") {
+      showStatus("当前不是云同步模式");
+      return;
+    }
+
+    if (!state.session) {
+      showStatus("请先登录");
+      return;
+    }
+
+    await loadCloudRecords();
+    refreshScreen(state.selectedDate);
+    showStatus("云端数据已重新同步");
+  } catch (error) {
+    console.error(error);
+    showStatus("同步失败");
+  }
+}
