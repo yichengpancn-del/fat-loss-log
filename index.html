@@ -8,9 +8,6 @@
   />
   <title>个人减脂记录</title>
   <meta name="theme-color" content="#f6f8fb" />
-  <meta name="description" content="个人减脂记录网页应用，支持体重、三大营养素、训练和云同步。" />
-  <link rel="manifest" href="./manifest.webmanifest" />
-  <link rel="apple-touch-icon" href="./icon-192.png" />
   <style>
     :root {
       --bg: #f6f8fb;
@@ -212,8 +209,7 @@
     .action-row,
     .stats-grid,
     .field-grid,
-    .calc-grid,
-    .chart-toolbar {
+    .calc-grid {
       display: grid;
       gap: 12px;
     }
@@ -404,7 +400,6 @@
       font-size: 13px;
       color: #344054;
       line-height: 1.55;
-      white-space: pre-wrap;
     }
 
     .empty-state {
@@ -424,8 +419,7 @@
       line-height: 1.6;
     }
 
-    .session-row,
-    .install-row {
+    .session-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -477,83 +471,6 @@
       display: none !important;
     }
 
-    .chart-wrap {
-      background: #fff;
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      padding: 12px;
-      overflow: hidden;
-    }
-
-    .chart-toolbar {
-      grid-template-columns: 1fr;
-      margin-bottom: 12px;
-    }
-
-    .segmented {
-      display: inline-flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .segmented button {
-      min-height: 40px;
-      padding: 0 14px;
-      border-radius: 999px;
-      background: #fff;
-      border: 1px solid var(--line);
-      color: var(--text);
-      box-shadow: none;
-    }
-
-    .segmented button.active {
-      background: var(--primary-soft);
-      color: var(--primary);
-      border-color: rgba(37, 99, 235, 0.28);
-    }
-
-    .chart-legend {
-      display: flex;
-      gap: 14px;
-      flex-wrap: wrap;
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    .legend-item {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .legend-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 999px;
-      display: inline-block;
-    }
-
-    .legend-dot.line {
-      background: var(--primary);
-    }
-
-    .legend-dot.avg {
-      background: #94a3b8;
-    }
-
-    .chart-empty {
-      color: var(--muted);
-      text-align: center;
-      padding: 36px 12px;
-      line-height: 1.7;
-    }
-
-    canvas {
-      width: 100%;
-      max-width: 100%;
-      display: block;
-    }
-
     @media (min-width: 720px) {
       .topbar {
         grid-template-columns: 1fr auto;
@@ -576,11 +493,6 @@
       .auth-grid {
         grid-template-columns: 1fr 180px;
         align-items: end;
-      }
-
-      .chart-toolbar {
-        grid-template-columns: 1fr auto;
-        align-items: center;
       }
     }
 
@@ -609,17 +521,6 @@
       <div class="topbar-meta">
         <span id="storageBadge" class="badge badge-local">本地模式</span>
         <span class="badge badge-soft">基础代谢固定 1800 kcal</span>
-      </div>
-    </section>
-
-    <section id="installCard" class="card hidden">
-      <div class="section-head">
-        <h2>安装到手机桌面</h2>
-        <p>安装后会更像原生 App，打开更方便。iPhone 可用 Safari 的“添加到主屏幕”，安卓通常会显示安装按钮。</p>
-      </div>
-      <div class="install-row">
-        <div id="installHint" class="session-email">当前设备支持安装</div>
-        <button id="installBtn" class="primary-btn" type="button">安装应用</button>
       </div>
     </section>
 
@@ -718,6 +619,7 @@
       <div class="action-row">
         <button id="saveBtn" class="primary-btn" type="button">保存 / 更新</button>
         <button id="deleteBtn" class="danger-btn" type="button">删除当前日期</button>
+        <button id="reloadBtn" class="secondary-btn" type="button">重新同步数据</button>
       </div>
     </section>
 
@@ -733,31 +635,6 @@
         <h2 id="recordCountText" class="stat-value">0</h2>
         <p id="recordCountSub" class="stat-sub">可点击下方历史记录快速载入编辑</p>
       </section>
-    </section>
-
-    <section class="card">
-      <div class="section-head">
-        <h2>体重趋势</h2>
-        <p>显示体重变化曲线，并用虚线标出该区间平均体重。</p>
-      </div>
-
-      <div class="chart-toolbar">
-        <div class="segmented" id="chartRangeButtons">
-          <button type="button" class="active" data-range="7">近 7 天</button>
-          <button type="button" data-range="30">近 30 天</button>
-          <button type="button" data-range="all">全部</button>
-        </div>
-
-        <div class="chart-legend">
-          <span class="legend-item"><span class="legend-dot line"></span>体重</span>
-          <span class="legend-item"><span class="legend-dot avg"></span>平均体重</span>
-        </div>
-      </div>
-
-      <div class="chart-wrap">
-        <canvas id="weightChart" height="260"></canvas>
-        <div id="chartEmpty" class="chart-empty hidden">至少记录 1 条体重数据后，这里会显示趋势图。</div>
-      </div>
     </section>
 
     <section class="card">
@@ -780,13 +657,15 @@
       const APP_CONFIG = {
         baseMetabolism: 1800,
 
-        // ====== 替换成你的 Supabase 配置 ======
+        // ====== 这里替换成你的 Supabase 项目配置 ======
+        // 例如：https://xxxx.supabase.co
         supabaseUrl: "https://pcegjuhteuddthkzkbyx.supabase.co",
-        supabaseAnonKey: "sb_publishable_KWuQ1OgAM0qVjbAoQEONOw_avC01JeT",
-        // =====================================
+        // 使用 anon / publishable key，不要填 service_role key
+        supabaseAnonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBjZWdqdWh0ZXVkZHRoa3prYnl4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI5NjkwMTYsImV4cCI6MjA4ODU0NTAxNn0.uiez6rZ8qWKGpg_VWCY4N3kYgZqWYphWVpuxND8XMdc",
+        // ==============================================
 
         tableName: "fat_loss_records",
-        localStorageKey: "fat-loss-records-v2"
+        localStorageKey: "fat-loss-records-v1"
       };
 
       const FIELD_MAP = {
@@ -798,12 +677,7 @@
         training: "trainingInput"
       };
 
-      const hasCloudConfig = Boolean(
-        APP_CONFIG.supabaseUrl &&
-        APP_CONFIG.supabaseAnonKey &&
-        !APP_CONFIG.supabaseUrl.includes("你的项目地址") &&
-        !APP_CONFIG.supabaseAnonKey.includes("你的anon")
-      );
+      const hasCloudConfig = Boolean(APP_CONFIG.supabaseUrl && APP_CONFIG.supabaseAnonKey);
 
       const state = {
         mode: hasCloudConfig ? "cloud" : "local",
@@ -811,9 +685,7 @@
         session: null,
         records: [],
         selectedDate: getTodayISO(),
-        toastTimer: null,
-        chartRange: "7",
-        installPromptEvent: null
+        toastTimer: null
       };
 
       const refs = {};
@@ -829,8 +701,6 @@
         refs.recordDateInput.value = state.selectedDate;
         updateStorageBadge();
         parseAuthErrorFromUrl();
-        setupInstallPrompt();
-        registerServiceWorker();
 
         if (state.mode === "cloud") {
           await initCloudMode();
@@ -844,10 +714,6 @@
       function cacheRefs() {
         refs.todayDateText = document.getElementById("todayDateText");
         refs.storageBadge = document.getElementById("storageBadge");
-        refs.installCard = document.getElementById("installCard");
-        refs.installBtn = document.getElementById("installBtn");
-        refs.installHint = document.getElementById("installHint");
-
         refs.authCard = document.getElementById("authCard");
         refs.sessionCard = document.getElementById("sessionCard");
         refs.emailInput = document.getElementById("emailInput");
@@ -880,10 +746,6 @@
         refs.historyList = document.getElementById("historyList");
         refs.footnote = document.getElementById("footnote");
         refs.statusBar = document.getElementById("statusBar");
-
-        refs.weightChart = document.getElementById("weightChart");
-        refs.chartEmpty = document.getElementById("chartEmpty");
-        refs.chartRangeButtons = document.getElementById("chartRangeButtons");
       }
 
       function bindEvents() {
@@ -911,7 +773,6 @@
         refs.deleteBtn.addEventListener("click", handleDelete);
         refs.sendMagicLinkBtn.addEventListener("click", sendMagicLink);
         refs.signOutBtn.addEventListener("click", signOut);
-        refs.installBtn.addEventListener("click", handleInstallApp);
 
         refs.historyList.addEventListener("click", (event) => {
           const trigger = event.target.closest("[data-date]");
@@ -922,14 +783,6 @@
           refs.recordDateInput.value = date;
           refreshScreen(date);
           window.scrollTo({ top: 0, behavior: "smooth" });
-        });
-
-        refs.chartRangeButtons.addEventListener("click", (event) => {
-          const button = event.target.closest("[data-range]");
-          if (!button) return;
-          state.chartRange = button.dataset.range;
-          setActiveRangeButton();
-          renderWeightChart();
         });
       }
 
@@ -1129,7 +982,6 @@
         renderCalorieCards(record);
         renderOverviewCards();
         renderHistoryList();
-        renderWeightChart();
         updateActionState();
 
         if (state.mode === "cloud") {
@@ -1268,212 +1120,6 @@
           .join("");
       }
 
-      function renderWeightChart() {
-        const canvas = refs.weightChart;
-        const ctx = canvas.getContext("2d");
-        const records = getChartRecords();
-
-        if (records.length === 0) {
-          refs.chartEmpty.classList.remove("hidden");
-          canvas.classList.add("hidden");
-          clearCanvas(ctx, canvas);
-          return;
-        }
-
-        refs.chartEmpty.classList.add("hidden");
-        canvas.classList.remove("hidden");
-
-        const ratio = window.devicePixelRatio || 1;
-        const cssWidth = canvas.clientWidth || canvas.parentElement.clientWidth || 600;
-        const cssHeight = 260;
-
-        canvas.width = Math.floor(cssWidth * ratio);
-        canvas.height = Math.floor(cssHeight * ratio);
-        ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
-
-        clearCanvas(ctx, canvas);
-
-        const width = cssWidth;
-        const height = cssHeight;
-        const padding = { top: 24, right: 18, bottom: 34, left: 42 };
-        const plotWidth = width - padding.left - padding.right;
-        const plotHeight = height - padding.top - padding.bottom;
-
-        const weights = records.map((item) => item.weight);
-        const average = weights.reduce((sum, value) => sum + value, 0) / weights.length;
-
-        let minWeight = Math.min(...weights, average);
-        let maxWeight = Math.max(...weights, average);
-
-        if (minWeight === maxWeight) {
-          minWeight -= 1;
-          maxWeight += 1;
-        } else {
-          const spread = maxWeight - minWeight;
-          minWeight -= Math.max(0.5, spread * 0.15);
-          maxWeight += Math.max(0.5, spread * 0.15);
-        }
-
-        const xStep = records.length === 1 ? 0 : plotWidth / (records.length - 1);
-        const getX = (index) => padding.left + xStep * index;
-        const getY = (value) => {
-          const ratioY = (value - minWeight) / (maxWeight - minWeight);
-          return padding.top + plotHeight - ratioY * plotHeight;
-        };
-
-        drawGrid(ctx, padding, plotWidth, plotHeight, minWeight, maxWeight, getY);
-        drawAverageLine(ctx, padding.left, padding.left + plotWidth, getY(average));
-        drawLineChart(ctx, records, getX, getY);
-        drawAxesLabels(ctx, records, getX, height, padding, minWeight, maxWeight);
-      }
-
-      function getChartRecords() {
-        const weightRecords = state.records
-          .filter((record) => record.weight != null)
-          .slice()
-          .sort((a, b) => a.recordDate.localeCompare(b.recordDate));
-
-        if (state.chartRange === "all") {
-          return weightRecords;
-        }
-
-        const limit = Number(state.chartRange);
-        return weightRecords.slice(-limit);
-      }
-
-      function drawGrid(ctx, padding, plotWidth, plotHeight, minWeight, maxWeight, getY) {
-        ctx.save();
-        ctx.strokeStyle = "#e8edf5";
-        ctx.lineWidth = 1;
-
-        const yTicks = 4;
-        for (let i = 0; i <= yTicks; i += 1) {
-          const value = minWeight + ((maxWeight - minWeight) / yTicks) * i;
-          const y = getY(value);
-          ctx.beginPath();
-          ctx.moveTo(padding.left, y);
-          ctx.lineTo(padding.left + plotWidth, y);
-          ctx.stroke();
-        }
-
-        ctx.restore();
-      }
-
-      function drawAverageLine(ctx, x1, x2, y) {
-        ctx.save();
-        ctx.strokeStyle = "#94a3b8";
-        ctx.lineWidth = 1.5;
-        ctx.setLineDash([6, 6]);
-        ctx.beginPath();
-        ctx.moveTo(x1, y);
-        ctx.lineTo(x2, y);
-        ctx.stroke();
-        ctx.restore();
-      }
-
-      function drawLineChart(ctx, records, getX, getY) {
-        ctx.save();
-
-        ctx.strokeStyle = "#2563eb";
-        ctx.lineWidth = 2.5;
-        ctx.lineJoin = "round";
-        ctx.lineCap = "round";
-        ctx.beginPath();
-
-        records.forEach((record, index) => {
-          const x = getX(index);
-          const y = getY(record.weight);
-
-          if (index === 0) {
-            ctx.moveTo(x, y);
-          } else {
-            ctx.lineTo(x, y);
-          }
-        });
-
-        ctx.stroke();
-
-        records.forEach((record, index) => {
-          const x = getX(index);
-          const y = getY(record.weight);
-
-          ctx.fillStyle = "#ffffff";
-          ctx.beginPath();
-          ctx.arc(x, y, 5, 0, Math.PI * 2);
-          ctx.fill();
-
-          ctx.strokeStyle = "#2563eb";
-          ctx.lineWidth = 2;
-          ctx.beginPath();
-          ctx.arc(x, y, 5, 0, Math.PI * 2);
-          ctx.stroke();
-
-          if (record.recordDate === state.selectedDate) {
-            ctx.fillStyle = "rgba(37, 99, 235, 0.12)";
-            ctx.beginPath();
-            ctx.arc(x, y, 10, 0, Math.PI * 2);
-            ctx.fill();
-          }
-        });
-
-        ctx.restore();
-      }
-
-      function drawAxesLabels(ctx, records, getX, chartHeight, padding, minWeight, maxWeight) {
-        ctx.save();
-        ctx.fillStyle = "#667085";
-        ctx.font = "12px Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif";
-
-        const yTicks = 4;
-        for (let i = 0; i <= yTicks; i += 1) {
-          const value = minWeight + ((maxWeight - minWeight) / yTicks) * i;
-          const y =
-            padding.top + (chartHeight - padding.top - padding.bottom) - ((value - minWeight) / (maxWeight - minWeight)) * (chartHeight - padding.top - padding.bottom);
-
-          ctx.textAlign = "right";
-          ctx.textBaseline = "middle";
-          ctx.fillText(value.toFixed(1), padding.left - 8, y);
-        }
-
-        const labelIndexes = buildXAxisLabelIndexes(records.length);
-
-        labelIndexes.forEach((index) => {
-          const record = records[index];
-          const x = getX(index);
-
-          ctx.textAlign = "center";
-          ctx.textBaseline = "top";
-          ctx.fillText(formatShortDate(record.recordDate), x, chartHeight - padding.bottom + 10);
-        });
-
-        ctx.restore();
-      }
-
-      function buildXAxisLabelIndexes(length) {
-        if (length <= 1) return [0];
-        if (length <= 4) return Array.from({ length }, (_, index) => index);
-
-        const indexes = [0];
-        const steps = 3;
-        for (let i = 1; i < steps; i += 1) {
-          indexes.push(Math.round((length - 1) * (i / steps)));
-        }
-        indexes.push(length - 1);
-
-        return [...new Set(indexes)];
-      }
-
-      function clearCanvas(ctx, canvas) {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-      }
-
-      function setActiveRangeButton() {
-        const buttons = refs.chartRangeButtons.querySelectorAll("[data-range]");
-        buttons.forEach((button) => {
-          button.classList.toggle("active", button.dataset.range === state.chartRange);
-        });
-      }
-
       function readFormRecord() {
         return normalizeRecord({
           recordDate: refs.recordDateInput.value || getTodayISO(),
@@ -1483,6 +1129,7 @@
           fat: parseNullableNumber(refs.fatInput.value),
           extraBurn: parseNullableNumber(refs.extraBurnInput.value),
           training: refs.trainingInput.value.trim(),
+          // 为后续扩展预留：如 steps、sleepHours、cardioMinutes 等
           extraFields: {}
         });
       }
@@ -1715,11 +1362,6 @@
         }).format(date);
       }
 
-      function formatShortDate(dateString) {
-        const [year, month, day] = dateString.split("-");
-        return `${month}/${day}`;
-      }
-
       function parseISODate(dateString) {
         const [year, month, day] = dateString.split("-").map(Number);
         return new Date(year, month - 1, day);
@@ -1780,68 +1422,6 @@
         state.toastTimer = window.setTimeout(() => {
           refs.statusBar.classList.remove("show");
         }, 2600);
-      }
-
-      function setupInstallPrompt() {
-        if (window.matchMedia("(display-mode: standalone)").matches) {
-          refs.installCard.classList.add("hidden");
-          return;
-        }
-
-        const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
-        if (isIOS) {
-          refs.installCard.classList.remove("hidden");
-          refs.installBtn.classList.add("hidden");
-          refs.installHint.textContent = "iPhone / iPad：请用 Safari 打开，然后点“分享”→“添加到主屏幕”。";
-        }
-
-        window.addEventListener("beforeinstallprompt", (event) => {
-          event.preventDefault();
-          state.installPromptEvent = event;
-          refs.installCard.classList.remove("hidden");
-          refs.installBtn.classList.remove("hidden");
-          refs.installHint.textContent = "当前设备支持一键安装。";
-        });
-      }
-
-      async function handleInstallApp() {
-        if (!state.installPromptEvent) {
-          showStatus("当前浏览器没有触发安装提示，可尝试用 Chrome 打开，或用 Safari 添加到主屏幕。");
-          return;
-        }
-
-        state.installPromptEvent.prompt();
-        const result = await state.installPromptEvent.userChoice;
-        if (result.outcome === "accepted") {
-          showStatus("安装请求已接受。");
-        } else {
-          showStatus("你取消了安装。");
-        }
-        state.installPromptEvent = null;
-        refs.installCard.classList.add("hidden");
-      }
-
-      async function registerServiceWorker() {
-        if (!("serviceWorker" in navigator)) return;
-        if (window.location.protocol !== "https:" && window.location.hostname !== "localhost") return;
-
-        try {
-          await navigator.serviceWorker.register("./sw.js");
-        } catch (error) {
-          console.error("Service Worker 注册失败：", error);
-        }
-      }
-
-      window.addEventListener("resize", debounce(() => {
-        renderWeightChart();
-      }, 120));
-
-      function debounce(fn, wait) {
-        let timer = null;
-        return (...args) => {
-          clearTimeout(timer);
-          timer = setTimeout(() => fn(...args), wait);
-        };
       }
     })();
   </script>
