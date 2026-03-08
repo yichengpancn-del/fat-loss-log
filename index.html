@@ -981,7 +981,7 @@
         localStorageKeyProfile: "fat-loss-profile-v2",
         swVersion: "20260308-1",
         defaultWeeklyLossRate: 0.85,
-        basePlanCalories: 2300,
+        basePlanCalories: 2500,
         planProteinRatio: 0.30,
         planCarbRatio: 0.45,
         planFatRatio: 0.25,
@@ -1897,7 +1897,7 @@
         }
 
         const latestWeight = latestWeightInfo.weight;
-        const targetDeficit = latestWeight * (weeklyLossRate / 100) * 7700 / 7;
+        const targetDeficit = latestWeight * (weeklyLossRate / 100) * 3350 / 7;
         const baseCalories = APP_CONFIG.basePlanCalories + numberOrZero(extraBurn);
 
         const planProtein = Math.max(80, Math.round(latestWeight * 2.0));
