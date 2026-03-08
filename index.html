@@ -112,6 +112,13 @@
       box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
     }
 
+    input[readonly] {
+      background: #f8fafc;
+      color: #111827;
+      font-weight: 700;
+      cursor: default;
+    }
+
     .app-shell {
       width: min(100%, 980px);
       margin: 0 auto;
@@ -375,6 +382,32 @@
       font-size: 20px;
       font-weight: 700;
       line-height: 1.2;
+    }
+
+    .macro-inline-list {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .macro-inline-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      min-height: 42px;
+      padding: 0 12px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: #f8fafc;
+      font-size: 14px;
+      color: #475467;
+    }
+
+    .macro-inline-item strong {
+      color: #111827;
+      font-size: 15px;
     }
 
     .primary-btn {
@@ -781,7 +814,7 @@
       <div class="section-head">
         <div>
           <h2>每日记录</h2>
-          <p>计划三大营养素可自动生成，也可手动改；实际三大营养素用于计算实际摄入热量。</p>
+          <p>计划蛋白和脂肪会自动固定；你只需要通过计划减重速度实时看计划碳水变化。实际三大营养素用于计算实际摄入热量。</p>
         </div>
       </div>
 
@@ -817,23 +850,16 @@
 
       <div class="macro-plan-grid">
         <section class="macro-box">
-          <h3>计划三大营养素</h3>
-          <div class="calc-grid">
-            <label class="form-label">
-              <span>计划蛋白（g）</span>
-              <input id="planProteinInput" type="number" inputmode="decimal" step="1" placeholder="自动生成" />
-            </label>
-
+          <h3>计划营养素</h3>
+          <div class="calc-grid" style="grid-template-columns:1fr;">
             <label class="form-label">
               <span>计划碳水（g）</span>
-              <input id="planCarbInput" type="number" inputmode="decimal" step="1" placeholder="自动生成" />
-            </label>
-
-            <label class="form-label">
-              <span>计划脂肪（g）</span>
-              <input id="planFatInput" type="number" inputmode="decimal" step="1" placeholder="自动生成" />
+              <input id="planCarbInput" type="number" inputmode="decimal" step="1" placeholder="自动生成" readonly />
             </label>
           </div>
+
+          <input id="planProteinInput" type="hidden" />
+          <input id="planFatInput" type="hidden" />
 
           <div class="macro-kpis">
             <div class="macro-kpi">
@@ -882,6 +908,16 @@
           <p class="eyebrow">基础代谢</p>
           <h3 id="bmrValue" class="metric-value">--</h3>
           <p id="bmrNote" class="metric-note">完善资料后可计算</p>
+          <div class="macro-inline-list">
+            <div class="macro-inline-item">
+              <span>固定蛋白</span>
+              <strong id="fixedProteinText">--</strong>
+            </div>
+            <div class="macro-inline-item">
+              <span>固定脂肪</span>
+              <strong id="fixedFatText">--</strong>
+            </div>
+          </div>
         </section>
 
         <section class="summary-card">
@@ -1055,6 +1091,8 @@
         refs.intakeNote = document.getElementById("intakeNote");
         refs.bmrValue = document.getElementById("bmrValue");
         refs.bmrNote = document.getElementById("bmrNote");
+        refs.fixedProteinText = document.getElementById("fixedProteinText");
+        refs.fixedFatText = document.getElementById("fixedFatText");
         refs.burnValue = document.getElementById("burnValue");
         refs.burnNote = document.getElementById("burnNote");
         refs.diffValue = document.getElementById("diffValue");
@@ -1101,9 +1139,6 @@
           refs.weightInput,
           refs.extraBurnInput,
           refs.noteInput,
-          refs.planProteinInput,
-          refs.planCarbInput,
-          refs.planFatInput,
           refs.weeklyLossRateInput,
           refs.actualProteinInput,
           refs.actualCarbInput,
@@ -1184,10 +1219,12 @@
       function handleProfileInputChange() {
         state.profile = readProfileForm();
         persistLocalProfile();
+        hydrateAutoPlanDefaults();
         renderLiveViews(readFormRecord(), state.profile);
       }
 
       function handleLivePreview() {
+        hydrateAutoPlanDefaults();
         renderLiveViews(readFormRecord(), state.profile);
       }
 
@@ -1196,13 +1233,6 @@
           if (!window.supabase || typeof window.supabase.createClient !== "function") {
             throw new Error("Supabase SDK 未加载：window.supabase.createClient 不存在");
           }
-
-          console.log("initCloudMode start", {
-            supabaseUrl: APP_CONFIG.supabaseUrl,
-            hasKey: Boolean(APP_CONFIG.supabaseAnonKey),
-            currentMode: state.mode,
-            href: window.location.href
-          });
 
           state.supabase = window.supabase.createClient(
             APP_CONFIG.supabaseUrl,
@@ -1224,27 +1254,17 @@
           state.mode = "cloud";
           state.session = sessionResult.data?.session || null;
 
-          console.log("getSession ok", {
-            hasSession: Boolean(state.session),
-            email: state.session?.user?.email || null
-          });
-
           updateStorageBadge();
           updateAuthCards();
 
           if (state.session) {
             await loadCloudRecords();
-            console.log("loadCloudRecords ok", {
-              count: state.records.length
-            });
           }
 
           refreshScreen(state.selectedDate);
 
           state.supabase.auth.onAuthStateChange(async (event, session) => {
             try {
-              console.log("onAuthStateChange", event, session?.user?.email || null);
-
               state.session = session || null;
               updateAuthCards();
 
@@ -1366,6 +1386,7 @@
       }
 
       async function handleSave() {
+        hydrateAutoPlanDefaults();
         const record = readFormRecord();
 
         if (state.mode === "cloud" && !state.session) {
@@ -1795,18 +1816,18 @@
         const record = readFormRecord();
         const summary = calculateSummary(record, state.profile);
 
-        if (record.planProtein == null && summary.planProtein != null) {
-          refs.planProteinInput.value = Math.round(summary.planProtein);
-        }
-        if (record.planCarb == null && summary.planCarb != null) {
-          refs.planCarbInput.value = Math.round(summary.planCarb);
-        }
-        if (record.planFat == null && summary.planFat != null) {
-          refs.planFatInput.value = Math.round(summary.planFat);
-        }
         if (record.weeklyLossRate == null) {
           refs.weeklyLossRateInput.value = String(APP_CONFIG.defaultWeeklyLossRate);
         }
+
+        refs.planProteinInput.value =
+          summary.planProtein == null ? "" : String(Math.round(summary.planProtein));
+
+        refs.planFatInput.value =
+          summary.planFat == null ? "" : String(Math.round(summary.planFat));
+
+        refs.planCarbInput.value =
+          summary.planCarb == null ? "" : String(Math.round(summary.planCarb));
       }
 
       function calculateSummary(record, profile) {
@@ -1858,12 +1879,19 @@
         );
 
         if (!latestWeightInfo || bmr == null) {
+          const fallbackProtein = cleanNullableInteger(record.planProtein);
+          const fallbackCarb = cleanNullableInteger(record.planCarb);
+          const fallbackFat = cleanNullableInteger(record.planFat);
+
           return {
             weeklyLossRate,
-            planProtein: cleanNullableInteger(record.planProtein),
-            planCarb: cleanNullableInteger(record.planCarb),
-            planFat: cleanNullableInteger(record.planFat),
-            planCalories: null,
+            planProtein: fallbackProtein,
+            planCarb: fallbackCarb,
+            planFat: fallbackFat,
+            planCalories:
+              fallbackProtein != null && fallbackCarb != null && fallbackFat != null
+                ? fallbackProtein * 4 + fallbackCarb * 4 + fallbackFat * 9
+                : null,
             targetDeficit: null
           };
         }
@@ -1872,19 +1900,12 @@
         const targetDeficit = latestWeight * (weeklyLossRate / 100) * 7700 / 7;
         const baseCalories = APP_CONFIG.basePlanCalories + numberOrZero(extraBurn);
 
-        const autoProtein = Math.max(80, Math.round(latestWeight * 2.0));
-        const autoFat = Math.max(40, Math.round(latestWeight * 0.7));
-
-        const planProtein = cleanNullableInteger(record.planProtein) ?? autoProtein;
-        const planFat = cleanNullableInteger(record.planFat) ?? autoFat;
+        const planProtein = Math.max(80, Math.round(latestWeight * 2.0));
+        const planFat = Math.max(40, Math.round(latestWeight * 0.7));
 
         let planCalories = Math.max(1200, baseCalories - targetDeficit);
-        let planCarb = cleanNullableInteger(record.planCarb);
-
-        if (planCarb == null) {
-          const remaining = planCalories - planProtein * 4 - planFat * 9;
-          planCarb = Math.max(APP_CONFIG.carbFloor, Math.round(remaining / 4));
-        }
+        const remaining = planCalories - planProtein * 4 - planFat * 9;
+        const planCarb = Math.max(APP_CONFIG.carbFloor, Math.round(remaining / 4));
 
         planCalories = planProtein * 4 + planCarb * 4 + planFat * 9;
 
@@ -1946,6 +1967,11 @@
 
         refs.intakeValue.textContent = `${Math.round(summary.actualIntake)} kcal`;
         refs.intakeNote.textContent = "由实际蛋白 / 碳水 / 脂肪自动计算";
+
+        refs.fixedProteinText.textContent =
+          summary.planProtein == null ? "--" : `${Math.round(summary.planProtein)} g`;
+        refs.fixedFatText.textContent =
+          summary.planFat == null ? "--" : `${Math.round(summary.planFat)} g`;
 
         if (summary.bmr == null) {
           refs.bmrValue.textContent = "--";
@@ -2019,7 +2045,7 @@
         refs.planKcalText.textContent = `${Math.round(summary.planCalories)} kcal`;
         refs.targetDeficitText.textContent = `${Math.round(summary.targetDeficit)} kcal`;
         refs.macroPlanHelp.textContent =
-          `基准 ${APP_CONFIG.basePlanCalories} kcal，蛋白和脂肪固定，只用碳水制造缺口。当前按 ${summary.weeklyLossRate.toFixed(2)}% / 周 估算。`;
+          `固定蛋白 ${Math.round(summary.planProtein)} g，固定脂肪 ${Math.round(summary.planFat)} g；调节“计划减重速度”时只会实时更新碳水。当前按 ${summary.weeklyLossRate.toFixed(2)}% / 周 估算。`;
       }
 
       function renderOverviewCards() {
