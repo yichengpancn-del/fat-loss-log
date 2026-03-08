@@ -34,7 +34,6 @@
     body {
       margin: 0;
       padding: 0;
-      min-height: 100%;
       background: linear-gradient(180deg, #f9fbff 0%, #f5f7fb 100%);
       color: var(--text);
       font-family:
@@ -49,10 +48,14 @@
         sans-serif;
     }
 
+    body {
+      min-height: 100vh;
+    }
+
     button,
     input,
-    select,
-    textarea {
+    textarea,
+    select {
       font: inherit;
     }
 
@@ -79,8 +82,8 @@
     }
 
     input,
-    select,
-    textarea {
+    textarea,
+    select {
       width: 100%;
       border: 1px solid var(--line);
       border-radius: 14px;
@@ -95,14 +98,14 @@
     }
 
     textarea {
-      min-height: 110px;
+      min-height: 116px;
       resize: vertical;
       line-height: 1.55;
     }
 
     input:focus,
-    select:focus,
     textarea:focus,
+    select:focus,
     button:focus-visible {
       outline: none;
       border-color: rgba(37, 99, 235, 0.45);
@@ -211,19 +214,16 @@
     .action-row,
     .stats-grid,
     .field-grid,
-    .calc-grid,
-    .profile-grid {
+    .calc-grid {
       display: grid;
       gap: 12px;
     }
 
-    .field-grid,
-    .profile-grid {
+    .field-grid {
       grid-template-columns: 1fr;
     }
 
-    .field-grid .span-2,
-    .profile-grid .span-2 {
+    .field-grid .span-2 {
       grid-column: auto;
     }
 
@@ -296,7 +296,7 @@
       margin: 6px 0 0;
       font-size: 12px;
       color: var(--muted);
-      line-height: 1.6;
+      line-height: 1.55;
     }
 
     .positive {
@@ -312,7 +312,7 @@
     }
 
     .action-row {
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: 1fr 1fr 1fr;
       margin-top: 14px;
     }
 
@@ -335,6 +335,59 @@
       color: var(--muted);
       font-size: 14px;
       line-height: 1.55;
+    }
+
+    .macro-plan-grid {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: 1fr;
+      margin-top: 14px;
+    }
+
+    .macro-box {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #fff;
+      padding: 14px;
+    }
+
+    .macro-box h3 {
+      margin: 0 0 10px;
+      font-size: 16px;
+    }
+
+    .macro-kpis {
+      display: grid;
+      gap: 10px;
+      grid-template-columns: repeat(2, 1fr);
+      margin-top: 10px;
+    }
+
+    .macro-kpi {
+      background: #f8fafc;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px;
+    }
+
+    .macro-kpi-label {
+      margin: 0 0 6px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .macro-kpi-value {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .macro-help {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
     }
 
     .history-list {
@@ -401,7 +454,7 @@
       line-height: 1.45;
     }
 
-    .history-note {
+    .history-training {
       margin: 8px 0 0;
       font-size: 13px;
       color: #344054;
@@ -418,8 +471,7 @@
       line-height: 1.65;
     }
 
-    .hint,
-    .profile-status {
+    .hint {
       margin: 10px 0 0;
       color: var(--muted);
       font-size: 13px;
@@ -478,40 +530,21 @@
       display: none !important;
     }
 
-    .chart-shell {
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      background: linear-gradient(180deg, #fff 0%, #f8fbff 100%);
-      padding: 12px;
-      overflow: hidden;
-    }
-
-    .chart-caption {
-      margin-top: 10px;
-      font-size: 13px;
-      color: var(--muted);
-      line-height: 1.6;
-    }
-
-    .chart-svg {
-      display: block;
-      width: 100%;
-      height: auto;
-    }
-
     @media (min-width: 720px) {
       .topbar {
         grid-template-columns: 1fr auto;
         align-items: end;
       }
 
-      .field-grid,
-      .profile-grid {
+      .macro-plan-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .field-grid {
         grid-template-columns: repeat(2, 1fr);
       }
 
-      .field-grid .span-2,
-      .profile-grid .span-2 {
+      .field-grid .span-2 {
         grid-column: 1 / -1;
       }
 
@@ -529,7 +562,8 @@
     @media (max-width: 719px) {
       .calc-grid,
       .stats-grid,
-      .action-row {
+      .action-row,
+      .macro-kpis {
         grid-template-columns: 1fr;
       }
 
@@ -552,6 +586,7 @@
         <span id="storageBadge" class="badge badge-local">本地模式</span>
         <span id="bmrBadge" class="badge badge-soft">基础代谢待完善</span>
         <span id="profileBadge" class="badge badge-soft">待完善个人信息</span>
+        <span id="macroBadge" class="badge badge-soft">计划宏量待生成</span>
       </div>
     </section>
 
@@ -567,7 +602,7 @@
         </label>
         <button id="sendMagicLinkBtn" class="primary-btn" type="button">发送登录链接</button>
       </div>
-      <p class="hint">未配置 Supabase 时，应用会自动使用浏览器本地存储，仅当前设备可见。</p>
+      <p class="hint">未配置或连接 Supabase 失败时，应用会自动回退到浏览器本地存储。</p>
     </section>
 
     <section id="sessionCard" class="card hidden">
@@ -581,13 +616,13 @@
       </div>
     </section>
 
-    <section id="profileCard" class="card hidden">
+    <section class="card">
       <div class="section-head">
         <h2>个人信息</h2>
-        <p>首次登录请填写。性别、出生年、身高会绑定到当前邮箱；基础代谢会根据这三项 + 最新体重自动计算。</p>
+        <p>用于自动计算基础代谢（BMR）。当前代码会把个人信息快照也写进每条记录的 <code>extra_fields</code>，这样不改表结构也能逐步同步。</p>
       </div>
 
-      <div class="profile-grid">
+      <div class="field-grid">
         <label class="form-label">
           <span>性别</span>
           <select id="genderInput">
@@ -598,33 +633,23 @@
         </label>
 
         <label class="form-label">
-          <span>出生年</span>
-          <input id="birthYearInput" type="number" min="1900" max="2100" inputmode="numeric" placeholder="例如 1997" />
+          <span>出生年份</span>
+          <input id="birthYearInput" type="number" min="1900" max="2100" step="1" inputmode="numeric" placeholder="例如 1993" />
         </label>
 
         <label class="form-label">
           <span>身高（cm）</span>
-          <input id="heightInput" type="number" step="0.1" min="80" max="260" inputmode="decimal" placeholder="例如 178" />
+          <input id="heightInput" type="number" min="0" step="0.1" inputmode="decimal" placeholder="例如 175" />
         </label>
-
-        <div class="form-label">
-          <span>绑定邮箱</span>
-          <input id="profileEmailText" type="text" readonly />
-        </div>
       </div>
 
-      <div class="action-row">
-        <button id="saveProfileBtn" class="primary-btn" type="button">保存个人信息</button>
-        <button id="resetProfileBtn" class="secondary-btn" type="button">恢复已保存信息</button>
-      </div>
-
-      <p id="profileStatus" class="profile-status">请先完善个人信息。</p>
+      <p id="profileHint" class="hint">完善性别、出生年份、身高，并至少记录一次体重后，系统会自动计算基础代谢。</p>
     </section>
 
     <section class="card">
       <div class="section-head">
         <h2>当日记录</h2>
-        <p>默认打开今天。只记录体重、总摄入卡路里、额外代谢；备注可选填。</p>
+        <p>默认打开今天。记录体重、计划三大营养素、实际三大营养素、额外代谢；备注可选填。</p>
       </div>
 
       <div class="date-row">
@@ -643,14 +668,71 @@
           </label>
 
           <label class="form-label">
-            <span>总摄入热量（kcal）</span>
-            <input id="intakeInput" type="number" step="1" min="0" inputmode="numeric" placeholder="例如 1850" />
-          </label>
-
-          <label class="form-label">
             <span>额外代谢（kcal）</span>
             <input id="extraBurnInput" type="number" step="1" min="0" inputmode="numeric" placeholder="例如 520" />
           </label>
+
+          <div class="span-2 macro-plan-grid">
+            <section class="macro-box">
+              <h3>今日计划摄入（自动生成，可手动微调）</h3>
+
+              <div class="field-grid">
+                <label class="form-label">
+                  <span>计划蛋白质（g）</span>
+                  <input id="planProteinInput" type="number" step="1" min="0" inputmode="numeric" placeholder="自动生成" />
+                </label>
+
+                <label class="form-label">
+                  <span>计划碳水（g）</span>
+                  <input id="planCarbInput" type="number" step="1" min="0" inputmode="numeric" placeholder="自动生成" />
+                </label>
+
+                <label class="form-label">
+                  <span>计划脂肪（g）</span>
+                  <input id="planFatInput" type="number" step="1" min="0" inputmode="numeric" placeholder="自动生成" />
+                </label>
+
+                <label class="form-label">
+                  <span>目标周降速率（% 体重 / 周）</span>
+                  <input id="weeklyLossRateInput" type="number" step="0.01" min="0.30" max="1.20" inputmode="decimal" placeholder="默认 0.85" />
+                </label>
+              </div>
+
+              <div class="macro-kpis">
+                <div class="macro-kpi">
+                  <p class="macro-kpi-label">计划总热量</p>
+                  <p id="planKcalText" class="macro-kpi-value">--</p>
+                </div>
+                <div class="macro-kpi">
+                  <p class="macro-kpi-label">目标日缺口</p>
+                  <p id="targetDeficitText" class="macro-kpi-value">--</p>
+                </div>
+              </div>
+
+              <p id="macroPlanHelp" class="macro-help">等待个人信息与最新体重后生成。</p>
+            </section>
+
+            <section class="macro-box">
+              <h3>今日实际摄入</h3>
+
+              <div class="field-grid">
+                <label class="form-label">
+                  <span>实际蛋白质（g）</span>
+                  <input id="actualProteinInput" type="number" step="1" min="0" inputmode="numeric" placeholder="例如 170" />
+                </label>
+
+                <label class="form-label">
+                  <span>实际碳水（g）</span>
+                  <input id="actualCarbInput" type="number" step="1" min="0" inputmode="numeric" placeholder="例如 180" />
+                </label>
+
+                <label class="form-label">
+                  <span>实际脂肪（g）</span>
+                  <input id="actualFatInput" type="number" step="1" min="0" inputmode="numeric" placeholder="例如 58" />
+                </label>
+              </div>
+            </section>
+          </div>
 
           <label class="form-label span-2">
             <span>备注 / 训练内容（选填）</span>
@@ -661,15 +743,15 @@
 
       <div class="calc-grid">
         <div class="mini-stat">
-          <p class="mini-stat-title">总摄入热量</p>
+          <p class="mini-stat-title">实际总摄入热量</p>
           <p id="intakeValue" class="mini-stat-value">0 kcal</p>
-          <p id="intakeNote" class="mini-stat-note">仅记录总摄入卡路里</p>
+          <p id="intakeNote" class="mini-stat-note">由实际蛋白 / 碳水 / 脂肪自动计算</p>
         </div>
 
         <div class="mini-stat">
           <p class="mini-stat-title">基础代谢</p>
           <p id="bmrValue" class="mini-stat-value">--</p>
-          <p id="bmrNote" class="mini-stat-note">等待个人信息和体重</p>
+          <p id="bmrNote" class="mini-stat-note">等待个人信息与体重</p>
         </div>
 
         <div class="mini-stat">
@@ -681,7 +763,7 @@
         <div class="mini-stat">
           <p class="mini-stat-title">热量差值</p>
           <p id="diffValue" class="mini-stat-value neutral">--</p>
-          <p id="diffNote" class="mini-stat-note">负数代表热量缺口</p>
+          <p id="diffNote" class="mini-stat-note">完善个人信息并至少记录一次体重后可计算</p>
         </div>
       </div>
 
@@ -708,15 +790,6 @@
 
     <section class="card">
       <div class="section-head">
-        <h2>体重趋势图</h2>
-        <p>显示最近 14 条有体重的记录。这里不依赖外部图表库，直接用内联 SVG 渲染，静态部署也能正常显示。</p>
-      </div>
-      <div id="chartWrap" class="chart-shell"></div>
-      <p id="chartCaption" class="chart-caption">暂无图表数据</p>
-    </section>
-
-    <section class="card">
-      <div class="section-head">
         <h2>历史记录</h2>
         <p>按日期倒序显示；点击任意条目即可载入到上方表单中编辑。</p>
       </div>
@@ -734,23 +807,31 @@
     (() => {
       const APP_CONFIG = {
         supabaseUrl: "https://pcegjuhteuddthkzkbyx.supabase.co",
-        supabaseAnonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBjZWdqdWh0ZXVkZHRoa3prYnl4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI5NjkwMTYsImV4cCI6MjA4ODU0NTAxNn0.uiez6rZ8qWKGpg_VWCY4N3kYgZqWYphWVpuxND8XMdc",
-        profilesTable: "profiles",
-        recordsTable: "fat_loss_records",
-        localRecordsKey: "fat-loss-records-v2",
-        legacyLocalRecordsKey: "fat-loss-records-v1",
-        localProfileKey: "fat-loss-profile-v1"
+        supabaseAnonKey: "sb_publishable_KWuQ1OgAM0qVjbAoQEONOw_avC01JeT",
+        tableName: "fat_loss_records",
+        localStorageKeyRecords: "fat-loss-records-v2",
+        localStorageKeyProfile: "fat-loss-profile-v2",
+        defaultWeeklyLossRate: 0.85,
+        basePlanCalories: 2300,
+        planProteinRatio: 0.30,
+        planCarbRatio: 0.45,
+        planFatRatio: 0.25,
+        carbFloor: 50
       };
 
-      const hasCloudConfig = Boolean(APP_CONFIG.supabaseUrl && APP_CONFIG.supabaseAnonKey);
+      const hasCloudConfig = Boolean(
+        APP_CONFIG.supabaseUrl &&
+        APP_CONFIG.supabaseAnonKey &&
+        APP_CONFIG.supabaseAnonKey !== "YOUR_SUPABASE_ANON_KEY"
+      );
 
       const state = {
         mode: hasCloudConfig ? "cloud" : "local",
         supabase: null,
         session: null,
         records: [],
-        profile: createEmptyProfile(""),
         selectedDate: getTodayISO(),
+        profile: createEmptyProfile(),
         toastTimer: null
       };
 
@@ -765,16 +846,18 @@
         renderTodayDate();
         window.setInterval(renderTodayDate, 60 * 1000);
 
+        state.profile = loadLocalProfile();
         refs.recordDateInput.value = state.selectedDate;
+        writeProfileForm(state.profile);
         updateStorageBadge();
         parseAuthErrorFromUrl();
 
         if (state.mode === "cloud") {
           await initCloudMode();
         } else {
-          loadLocalState();
-          updateAuthCards();
+          state.records = loadLocalRecords();
           refreshScreen(state.selectedDate);
+          updateAuthCards();
         }
       }
 
@@ -783,6 +866,7 @@
         refs.storageBadge = document.getElementById("storageBadge");
         refs.bmrBadge = document.getElementById("bmrBadge");
         refs.profileBadge = document.getElementById("profileBadge");
+        refs.macroBadge = document.getElementById("macroBadge");
 
         refs.authCard = document.getElementById("authCard");
         refs.sessionCard = document.getElementById("sessionCard");
@@ -791,21 +875,29 @@
         refs.sessionEmail = document.getElementById("sessionEmail");
         refs.signOutBtn = document.getElementById("signOutBtn");
 
-        refs.profileCard = document.getElementById("profileCard");
         refs.genderInput = document.getElementById("genderInput");
         refs.birthYearInput = document.getElementById("birthYearInput");
         refs.heightInput = document.getElementById("heightInput");
-        refs.profileEmailText = document.getElementById("profileEmailText");
-        refs.saveProfileBtn = document.getElementById("saveProfileBtn");
-        refs.resetProfileBtn = document.getElementById("resetProfileBtn");
-        refs.profileStatus = document.getElementById("profileStatus");
+        refs.profileHint = document.getElementById("profileHint");
 
         refs.recordDateInput = document.getElementById("recordDateInput");
         refs.goTodayBtn = document.getElementById("goTodayBtn");
         refs.weightInput = document.getElementById("weightInput");
-        refs.intakeInput = document.getElementById("intakeInput");
         refs.extraBurnInput = document.getElementById("extraBurnInput");
         refs.noteInput = document.getElementById("noteInput");
+
+        refs.planProteinInput = document.getElementById("planProteinInput");
+        refs.planCarbInput = document.getElementById("planCarbInput");
+        refs.planFatInput = document.getElementById("planFatInput");
+        refs.weeklyLossRateInput = document.getElementById("weeklyLossRateInput");
+
+        refs.actualProteinInput = document.getElementById("actualProteinInput");
+        refs.actualCarbInput = document.getElementById("actualCarbInput");
+        refs.actualFatInput = document.getElementById("actualFatInput");
+
+        refs.planKcalText = document.getElementById("planKcalText");
+        refs.targetDeficitText = document.getElementById("targetDeficitText");
+        refs.macroPlanHelp = document.getElementById("macroPlanHelp");
 
         refs.intakeValue = document.getElementById("intakeValue");
         refs.intakeNote = document.getElementById("intakeNote");
@@ -824,9 +916,6 @@
         refs.avgWeightSub = document.getElementById("avgWeightSub");
         refs.recordCountText = document.getElementById("recordCountText");
         refs.recordCountSub = document.getElementById("recordCountSub");
-
-        refs.chartWrap = document.getElementById("chartWrap");
-        refs.chartCaption = document.getElementById("chartCaption");
         refs.historyList = document.getElementById("historyList");
         refs.footnote = document.getElementById("footnote");
         refs.statusBar = document.getElementById("statusBar");
@@ -834,8 +923,9 @@
 
       function bindEvents() {
         refs.recordDateInput.addEventListener("change", () => {
-          state.selectedDate = refs.recordDateInput.value || getTodayISO();
-          refreshScreen(state.selectedDate);
+          const nextDate = refs.recordDateInput.value || getTodayISO();
+          state.selectedDate = nextDate;
+          refreshScreen(nextDate);
         });
 
         refs.goTodayBtn.addEventListener("click", () => {
@@ -845,30 +935,35 @@
         });
 
         [
-          refs.weightInput,
-          refs.intakeInput,
-          refs.extraBurnInput,
-          refs.noteInput,
           refs.genderInput,
           refs.birthYearInput,
           refs.heightInput
+        ].forEach((el) => {
+          el.addEventListener("input", handleProfileInputChange);
+          el.addEventListener("change", handleProfileInputChange);
+        });
+
+        [
+          refs.weightInput,
+          refs.extraBurnInput,
+          refs.noteInput,
+          refs.planProteinInput,
+          refs.planCarbInput,
+          refs.planFatInput,
+          refs.weeklyLossRateInput,
+          refs.actualProteinInput,
+          refs.actualCarbInput,
+          refs.actualFatInput
         ].forEach((el) => {
           el.addEventListener("input", handleLivePreview);
           el.addEventListener("change", handleLivePreview);
         });
 
-        refs.saveBtn.addEventListener("click", handleSaveRecord);
-        refs.deleteBtn.addEventListener("click", handleDeleteRecord);
         refs.reloadBtn.addEventListener("click", handleReloadCloudData);
-
+        refs.saveBtn.addEventListener("click", handleSave);
+        refs.deleteBtn.addEventListener("click", handleDelete);
         refs.sendMagicLinkBtn.addEventListener("click", sendMagicLink);
         refs.signOutBtn.addEventListener("click", signOut);
-
-        refs.saveProfileBtn.addEventListener("click", handleSaveProfile);
-        refs.resetProfileBtn.addEventListener("click", () => {
-          writeProfileForm(state.profile);
-          handleLivePreview();
-        });
 
         refs.historyList.addEventListener("click", (event) => {
           const trigger = event.target.closest("[data-date]");
@@ -884,19 +979,29 @@
 
       function registerServiceWorker() {
         if (!("serviceWorker" in navigator)) return;
-        if (!/^https?:$/.test(window.location.protocol)) return;
+        if (window.location.protocol === "file:") return;
 
-        navigator.serviceWorker
-          .register("./sw.js")
-          .catch((error) => console.error("Service Worker 注册失败：", error));
+        window.addEventListener("load", async () => {
+          try {
+            await navigator.serviceWorker.register("./sw.js");
+          } catch (error) {
+            console.error("service worker register failed:", error);
+          }
+        });
+      }
+
+      function handleProfileInputChange() {
+        state.profile = readProfileForm();
+        persistLocalProfile();
+        renderLiveViews(readFormRecord(), state.profile);
+      }
+
+      function handleLivePreview() {
+        renderLiveViews(readFormRecord(), state.profile);
       }
 
       async function initCloudMode() {
         try {
-          if (!window.supabase || typeof window.supabase.createClient !== "function") {
-            throw new Error("Supabase SDK 加载失败");
-          }
-
           state.supabase = window.supabase.createClient(
             APP_CONFIG.supabaseUrl,
             APP_CONFIG.supabaseAnonKey,
@@ -917,71 +1022,49 @@
           if (error) throw error;
 
           state.session = session || null;
+          updateAuthCards();
 
           if (state.session) {
-            cleanupAuthHashIfNeeded();
-            await loadCloudState();
-          } else {
-            state.records = [];
-            state.profile = createEmptyProfile("");
+            await loadCloudRecords();
           }
 
-          updateAuthCards();
           refreshScreen(state.selectedDate);
 
-          state.supabase.auth.onAuthStateChange((event, sessionValue) => {
-            void handleAuthStateChange(event, sessionValue);
+          state.supabase.auth.onAuthStateChange(async (event, session) => {
+            state.session = session || null;
+            updateAuthCards();
+
+            if (event === "SIGNED_OUT") {
+              state.records = [];
+              state.selectedDate = getTodayISO();
+              refs.recordDateInput.value = state.selectedDate;
+              refreshScreen(state.selectedDate);
+              showStatus("已退出登录。");
+              return;
+            }
+
+            if (state.session) {
+              await loadCloudRecords();
+              refreshScreen(state.selectedDate);
+              if (event === "SIGNED_IN") {
+                showStatus("登录成功，云端数据已同步。");
+              }
+            } else {
+              state.records = [];
+              refreshScreen(state.selectedDate);
+            }
           });
         } catch (error) {
           console.error(error);
           state.mode = "local";
           state.supabase = null;
           state.session = null;
-          loadLocalState();
+          state.records = loadLocalRecords();
+          updateStorageBadge();
           updateAuthCards();
           refreshScreen(state.selectedDate);
           showStatus("Supabase 初始化失败，已自动回退到本地模式。");
         }
-      }
-
-      async function handleAuthStateChange(event, sessionValue) {
-        state.session = sessionValue || null;
-        cleanupAuthHashIfNeeded();
-        updateAuthCards();
-
-        if (!state.session) {
-          state.records = [];
-          state.profile = createEmptyProfile("");
-          state.selectedDate = getTodayISO();
-          refs.recordDateInput.value = state.selectedDate;
-          refreshScreen(state.selectedDate);
-
-          if (event === "SIGNED_OUT") {
-            showStatus("已退出登录。");
-          }
-          return;
-        }
-
-        try {
-          await loadCloudState();
-          refreshScreen(state.selectedDate);
-
-          if (event === "SIGNED_IN") {
-            showStatus("登录成功，云端数据已同步。");
-          }
-        } catch (error) {
-          console.error(error);
-          showStatus(`登录后初始化失败：${error.message || "请检查 Supabase 表结构"}`);
-        }
-      }
-
-      async function loadCloudState() {
-        await Promise.all([loadCloudProfile(), loadCloudRecords()]);
-      }
-
-      function loadLocalState() {
-        state.records = loadLocalRecords();
-        state.profile = loadLocalProfile();
       }
 
       async function sendMagicLink() {
@@ -1034,68 +1117,46 @@
         }
       }
 
-      async function handleSaveProfile() {
-        const profile = readProfileForm();
-
-        if (!profileComplete(profile)) {
-          showStatus("请完整填写性别、出生年和身高。");
-          return;
-        }
-
-        refs.saveProfileBtn.disabled = true;
-
+      async function handleReloadCloudData() {
         try {
-          if (state.mode === "cloud") {
-            if (!state.session) {
-              showStatus("请先登录后再保存个人信息。");
-              return;
-            }
-
-            await saveCloudProfile(profile);
-            showStatus("个人信息已保存到云端。");
-          } else {
-            saveLocalProfile(profile);
-            showStatus("个人信息已保存到本地。");
+          if (state.mode !== "cloud") {
+            showStatus("当前不是云同步模式。");
+            return;
           }
 
+          if (!state.session) {
+            showStatus("请先登录。");
+            return;
+          }
+
+          await loadCloudRecords();
           refreshScreen(state.selectedDate);
+          showStatus("云端数据已重新同步。");
         } catch (error) {
           console.error(error);
-          showStatus(`保存个人信息失败：${error.message || "请稍后再试"}`);
-        } finally {
-          refs.saveProfileBtn.disabled = false;
+          showStatus(`同步失败：${error.message || "请稍后再试"}`);
         }
       }
 
-      async function handleSaveRecord() {
-        if (state.mode === "cloud" && !state.session) {
-          showStatus("请先登录后再保存云端数据。");
-          return;
-        }
-
-        const savedProfile = normalizeProfile(state.profile);
-        if (!profileComplete(savedProfile)) {
-          showStatus("请先保存个人信息，再保存记录。");
-          return;
-        }
-
-        const draftProfile = readProfileForm();
-        if (!profilesEqual(savedProfile, draftProfile)) {
-          showStatus("你修改了个人信息，请先点击“保存个人信息”。");
-          return;
-        }
-
+      async function handleSave() {
         const record = readFormRecord();
 
         if (isRecordEmpty(record)) {
-          showStatus("请至少填写体重、摄入热量、额外代谢或备注中的一项。");
+          showStatus("请至少填写一项内容后再保存。");
           return;
         }
 
         refs.saveBtn.disabled = true;
 
         try {
+          state.profile = readProfileForm();
+          persistLocalProfile();
+
           if (state.mode === "cloud") {
+            if (!state.session) {
+              showStatus("请先登录后再保存云端数据。");
+              return;
+            }
             await saveCloudRecord(record);
             showStatus("已保存到云端。");
           } else {
@@ -1114,7 +1175,7 @@
         }
       }
 
-      async function handleDeleteRecord() {
+      async function handleDelete() {
         const currentDate = refs.recordDateInput.value || state.selectedDate || getTodayISO();
         const existingRecord = findRecordByDate(currentDate);
 
@@ -1150,30 +1211,6 @@
         }
       }
 
-      async function handleReloadCloudData() {
-        try {
-          if (state.mode !== "cloud") {
-            showStatus("当前不是云同步模式。");
-            return;
-          }
-
-          if (!state.session) {
-            showStatus("请先登录。");
-            return;
-          }
-
-          refs.reloadBtn.disabled = true;
-          await loadCloudState();
-          refreshScreen(state.selectedDate);
-          showStatus("云端数据已重新同步。");
-        } catch (error) {
-          console.error(error);
-          showStatus(`同步失败：${error.message || "请检查网络或 Supabase 配置"}`);
-        } finally {
-          refs.reloadBtn.disabled = false;
-        }
-      }
-
       function refreshScreen(date) {
         const targetDate = date || getTodayISO();
         const record = findRecordByDate(targetDate) || createEmptyRecord(targetDate);
@@ -1181,41 +1218,33 @@
         refs.recordDateInput.value = targetDate;
         writeProfileForm(state.profile);
         writeFormRecord(record);
+        hydrateAutoPlanDefaults();
         updateAuthCards();
-        renderLiveViews(record, state.profile);
-        renderOverviewCards();
-        renderHistoryList();
-        updateActionState();
-        updateFootnote();
-      }
-
-      function handleLivePreview() {
-        const record = readFormRecord();
-        const profile = readProfileForm();
-        renderLiveViews(record, profile);
-        updateActionState();
+        renderLiveViews(readFormRecord(), state.profile);
       }
 
       function renderLiveViews(record, profile) {
         renderSummaryCards(record, profile);
         renderTopBadges(record, profile);
         renderProfileStatus(profile);
-        renderWeightChart(record);
+        renderMacroPlanner(record, profile);
+        renderOverviewCards();
+        renderHistoryList();
+        updateActionState();
+        updateFootnote();
       }
 
       function renderSummaryCards(record, profile) {
         const summary = calculateSummary(record, profile);
 
-        refs.intakeValue.textContent = `${Math.round(summary.totalIntake)} kcal`;
-        refs.intakeNote.textContent = "仅记录总摄入卡路里";
+        refs.intakeValue.textContent = `${Math.round(summary.actualIntake)} kcal`;
+        refs.intakeNote.textContent = "由实际蛋白 / 碳水 / 脂肪自动计算";
 
         if (summary.bmr == null) {
           refs.bmrValue.textContent = "--";
           refs.bmrNote.textContent = getBmrMissingReason(profile, summary.latestWeightInfo);
-
           refs.burnValue.textContent = "--";
           refs.burnNote.textContent = "基础代谢 + 额外代谢";
-
           refs.diffValue.textContent = "--";
           refs.diffValue.classList.remove("positive", "negative", "neutral");
           refs.diffValue.classList.add("neutral");
@@ -1224,23 +1253,18 @@
         }
 
         refs.bmrValue.textContent = `${Math.round(summary.bmr)} kcal`;
-
-        const latestWeightText = summary.latestWeightInfo
-          ? `${summary.latestWeightInfo.weight.toFixed(1)} kg（${formatDateShort(summary.latestWeightInfo.recordDate)}）`
-          : "--";
-
-        refs.bmrNote.textContent = `最新体重 ${latestWeightText}；年龄按出生年估算`;
+        refs.bmrNote.textContent = `按最新体重 ${formatNumber(summary.latestWeightInfo?.weight, 1)} kg 自动估算`;
 
         refs.burnValue.textContent = `${Math.round(summary.totalBurn)} kcal`;
         refs.burnNote.textContent = `基础代谢 ${Math.round(summary.bmr)} + 额外代谢 ${Math.round(summary.extraBurn)} kcal`;
 
-        refs.diffValue.textContent = `${formatSignedNumber(Math.round(summary.calorieDiff))} kcal`;
+        refs.diffValue.textContent = `${formatSignedNumber(Math.round(summary.actualDiff))} kcal`;
         refs.diffValue.classList.remove("positive", "negative", "neutral");
 
-        if (summary.calorieDiff < 0) {
+        if (summary.actualDiff < 0) {
           refs.diffValue.classList.add("negative");
           refs.diffNote.textContent = "当前为热量缺口";
-        } else if (summary.calorieDiff > 0) {
+        } else if (summary.actualDiff > 0) {
           refs.diffValue.classList.add("positive");
           refs.diffNote.textContent = "当前为热量盈余";
         } else {
@@ -1260,29 +1284,35 @@
         refs.profileBadge.textContent = profileComplete(profile)
           ? `${getGenderText(profile.gender)} / ${getAgeFromBirthYear(profile)} 岁 / ${formatNumber(profile.heightCm, 1)} cm`
           : "待完善个人信息";
+
+        refs.macroBadge.textContent =
+          summary.planCalories == null
+            ? "计划宏量待生成"
+            : `计划 ${Math.round(summary.planCalories)} kcal / 实际 ${Math.round(summary.actualIntake)} kcal`;
       }
 
       function renderProfileStatus(profile) {
-        refs.profileEmailText.value =
-          state.mode === "cloud"
-            ? state.session?.user?.email || ""
-            : "本地模式未绑定邮箱";
+        if (profileComplete(profile)) {
+          refs.profileHint.textContent = "个人信息已完善。基础代谢会按最新体重自动计算。";
+        } else {
+          refs.profileHint.textContent = "请补全性别、出生年份、身高，并至少记录一次体重。";
+        }
+      }
 
-        if (!profileComplete(profile)) {
-          refs.profileStatus.textContent =
-            state.mode === "cloud"
-              ? "首次登录请先保存性别、出生年、身高。保存后会绑定到当前邮箱。"
-              : "本地模式：请先完善个人信息，基础代谢才能自动计算。";
+      function renderMacroPlanner(record, profile) {
+        const summary = calculateSummary(record, profile);
+
+        if (summary.planCalories == null) {
+          refs.planKcalText.textContent = "--";
+          refs.targetDeficitText.textContent = "--";
+          refs.macroPlanHelp.textContent = "请先完善个人信息并至少记录一次体重，系统才能按最新体重自动生成计划。";
           return;
         }
 
-        const age = getAgeFromBirthYear(profile);
-        const text = `${getGenderText(profile.gender)} / ${age} 岁 / ${formatNumber(profile.heightCm, 1)} cm`;
-
-        refs.profileStatus.textContent =
-          state.mode === "cloud"
-            ? `已绑定 ${state.session?.user?.email || ""}，当前信息：${text}。基础代谢会随最新体重自动更新。`
-            : `本地模式：已保存 ${text}，基础代谢会随最新体重自动更新。`;
+        refs.planKcalText.textContent = `${Math.round(summary.planCalories)} kcal`;
+        refs.targetDeficitText.textContent = `${Math.round(summary.targetDeficit)} kcal`;
+        refs.macroPlanHelp.textContent =
+          `基准 2300 kcal，蛋白和脂肪固定，只用碳水制造缺口。当前按 ${summary.weeklyLossRate.toFixed(2)}% / 周 估算。`;
       }
 
       function renderOverviewCards() {
@@ -1301,127 +1331,6 @@
           refs.avgWeightText.textContent = `${sevenDayStats.average.toFixed(1)} kg`;
           refs.avgWeightSub.textContent = `统计区间：最近 7 天，已记录 ${sevenDayStats.count} 天体重`;
         }
-      }
-
-      function renderWeightChart(previewRecord) {
-        const records = mergeRecordIntoList(state.records, previewRecord)
-          .filter((item) => item.weight != null)
-          .sort((a, b) => a.recordDate.localeCompare(b.recordDate))
-          .slice(-14);
-
-        if (records.length === 0) {
-          refs.chartWrap.innerHTML = `
-            <div class="empty-state">
-              还没有体重数据。<br />
-              保存至少一条体重记录后，这里会显示趋势图。
-            </div>
-          `;
-          refs.chartCaption.textContent = "暂无图表数据";
-          return;
-        }
-
-        const width = 800;
-        const height = 280;
-        const pad = { top: 20, right: 18, bottom: 42, left: 48 };
-
-        const weights = records.map((item) => item.weight);
-        const minWeight = Math.min(...weights);
-        const maxWeight = Math.max(...weights);
-        const range = Math.max(maxWeight - minWeight, 1);
-        const yMin = minWeight - Math.max(0.4, range * 0.18);
-        const yMax = maxWeight + Math.max(0.4, range * 0.18);
-
-        const innerWidth = width - pad.left - pad.right;
-        const innerHeight = height - pad.top - pad.bottom;
-
-        const points = records.map((item, index) => {
-          const x =
-            records.length === 1
-              ? pad.left + innerWidth / 2
-              : pad.left + (innerWidth * index) / (records.length - 1);
-
-          const y =
-            pad.top +
-            ((yMax - item.weight) / (yMax - yMin)) * innerHeight;
-
-          return {
-            ...item,
-            x,
-            y
-          };
-        });
-
-        const pathD = points
-          .map((point, index) => `${index === 0 ? "M" : "L"} ${point.x.toFixed(2)} ${point.y.toFixed(2)}`)
-          .join(" ");
-
-        const areaD = [
-          `M ${points[0].x.toFixed(2)} ${(pad.top + innerHeight).toFixed(2)}`,
-          ...points.map((point) => `L ${point.x.toFixed(2)} ${point.y.toFixed(2)}`),
-          `L ${points[points.length - 1].x.toFixed(2)} ${(pad.top + innerHeight).toFixed(2)}`,
-          "Z"
-        ].join(" ");
-
-        const yTicks = 4;
-        const gridLines = Array.from({ length: yTicks + 1 }, (_, index) => {
-          const value = yMin + ((yMax - yMin) * index) / yTicks;
-          const y = pad.top + innerHeight - (innerHeight * index) / yTicks;
-
-          return `
-            <g>
-              <line x1="${pad.left}" y1="${y.toFixed(2)}" x2="${width - pad.right}" y2="${y.toFixed(2)}" stroke="#e6eaf2" stroke-width="1" />
-              <text x="${pad.left - 8}" y="${(y + 4).toFixed(2)}" text-anchor="end" fill="#667085" font-size="12">${value.toFixed(1)}</text>
-            </g>
-          `;
-        }).join("");
-
-        const xLabels = points.map((point, index) => {
-          const shouldShow =
-            points.length <= 6 ||
-            index === 0 ||
-            index === points.length - 1 ||
-            index % 2 === 0;
-
-          if (!shouldShow) return "";
-
-          return `
-            <text x="${point.x.toFixed(2)}" y="${(height - 12).toFixed(2)}" text-anchor="middle" fill="#667085" font-size="12">
-              ${escapeHtml(formatDateTiny(point.recordDate))}
-            </text>
-          `;
-        }).join("");
-
-        const circles = points.map((point) => {
-          return `
-            <g>
-              <circle cx="${point.x.toFixed(2)}" cy="${point.y.toFixed(2)}" r="4.5" fill="#2563eb" />
-              <circle cx="${point.x.toFixed(2)}" cy="${point.y.toFixed(2)}" r="8" fill="transparent">
-                <title>${formatDateLong(point.recordDate)}：${point.weight.toFixed(1)} kg</title>
-              </circle>
-            </g>
-          `;
-        }).join("");
-
-        refs.chartWrap.innerHTML = `
-          <svg class="chart-svg" viewBox="0 0 ${width} ${height}" role="img" aria-label="体重趋势图">
-            <defs>
-              <linearGradient id="weightAreaGradient" x1="0" x2="0" y1="0" y2="1">
-                <stop offset="0%" stop-color="rgba(37,99,235,0.25)" />
-                <stop offset="100%" stop-color="rgba(37,99,235,0.02)" />
-              </linearGradient>
-            </defs>
-
-            ${gridLines}
-
-            <path d="${areaD}" fill="url(#weightAreaGradient)"></path>
-            <path d="${pathD}" fill="none" stroke="#2563eb" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
-            ${circles}
-            ${xLabels}
-          </svg>
-        `;
-
-        const latest = points[points.length - 1];
-        refs.chartCaption.textContent = `最近 ${points.length} 条体重记录；最新：${formatDateLong(latest.recordDate)} ${latest.weight.toFixed(1)} kg`;
       }
 
       function renderHistoryList() {
@@ -1448,23 +1357,31 @@
           .map((record) => {
             const active = record.recordDate === (refs.recordDateInput.value || state.selectedDate);
             const summary = calculateSummary(record, state.profile);
+
             const diffClass =
-              summary.calorieDiff == null
+              summary.actualDiff == null
                 ? "neutral"
-                : summary.calorieDiff < 0
+                : summary.actualDiff < 0
                   ? "negative"
-                  : summary.calorieDiff > 0
+                  : summary.actualDiff > 0
                     ? "positive"
                     : "neutral";
 
             const diffText =
-              summary.calorieDiff == null
+              summary.actualDiff == null
                 ? "--"
-                : `${formatSignedNumber(Math.round(summary.calorieDiff))} kcal`;
+                : `${formatSignedNumber(Math.round(summary.actualDiff))} kcal`;
 
-            const weightText = record.weight == null ? "未记体重" : `${record.weight.toFixed(1)} kg`;
-            const intakeText = `${Math.round(numberOrZero(record.intakeKcal))} kcal`;
-            const burnText = summary.totalBurn == null ? "--" : `${Math.round(summary.totalBurn)} kcal`;
+            const weightText =
+              record.weight == null ? "未记体重" : `${record.weight.toFixed(1)} kg`;
+
+            const planText =
+              summary.planCalories == null ? "--" : `${Math.round(summary.planCalories)} kcal`;
+
+            const intakeText = `${Math.round(summary.actualIntake)} kcal`;
+            const burnText =
+              summary.totalBurn == null ? "--" : `${Math.round(summary.totalBurn)} kcal`;
+
             const noteText = record.note ? escapeHtml(record.note) : "未填写备注";
 
             return `
@@ -1474,15 +1391,14 @@
                     <div class="history-date">${formatDateLong(record.recordDate)}</div>
                     <div class="history-diff ${diffClass}">${diffText}</div>
                   </div>
-
                   <div class="history-meta">
                     <span>体重：${weightText}</span>
-                    <span>摄入：${intakeText}</span>
+                    <span>计划：${planText}</span>
+                    <span>实际：${intakeText}</span>
                     <span>额外代谢：${Math.round(numberOrZero(record.extraBurn))} kcal</span>
                     <span>总消耗：${burnText}</span>
                   </div>
-
-                  <p class="history-note">${noteText}</p>
+                  <p class="history-training">${noteText}</p>
                 </div>
               </button>
             `;
@@ -1490,66 +1406,8 @@
           .join("");
       }
 
-      function updateActionState() {
-        const needLogin = state.mode === "cloud" && !state.session;
-        const hasRecord = Boolean(findRecordByDate(refs.recordDateInput.value || state.selectedDate));
-
-        refs.saveBtn.disabled = needLogin;
-        refs.deleteBtn.disabled = needLogin || !hasRecord;
-        refs.reloadBtn.disabled = state.mode !== "cloud" || !state.session;
-        refs.saveProfileBtn.disabled = needLogin;
-      }
-
-      function updateAuthCards() {
-        updateStorageBadge();
-
-        const showAuthCard = state.mode === "cloud" && !state.session;
-        const showSessionCard = state.mode === "cloud" && !!state.session;
-        const showProfileCard = state.mode === "local" || (state.mode === "cloud" && !!state.session);
-
-        refs.authCard.classList.toggle("hidden", !showAuthCard);
-        refs.sessionCard.classList.toggle("hidden", !showSessionCard);
-        refs.profileCard.classList.toggle("hidden", !showProfileCard);
-
-        refs.sessionEmail.textContent = state.session?.user?.email || "-";
-        refs.profileEmailText.value =
-          state.mode === "cloud"
-            ? state.session?.user?.email || ""
-            : "本地模式未绑定邮箱";
-      }
-
-      function updateStorageBadge() {
-        refs.storageBadge.textContent = state.mode === "cloud" ? "云同步模式" : "本地模式";
-        refs.storageBadge.className = `badge ${state.mode === "cloud" ? "badge-cloud" : "badge-local"}`;
-      }
-
-      function updateFootnote() {
-        if (state.mode === "cloud") {
-          refs.footnote.textContent = state.session
-            ? "当前为云同步模式：个人信息绑定到当前邮箱，记录保存在 Supabase。你可以在手机和电脑上使用同一个邮箱登录访问同一份数据。"
-            : "当前为云同步模式：请先登录邮箱。登录后会自动读取该邮箱绑定的个人信息和历史记录。";
-        } else {
-          refs.footnote.textContent =
-            "当前为本地模式：个人信息和记录只保存在当前浏览器中。要启用跨端同步，请部署页面并配置 Supabase。";
-        }
-      }
-
-      function renderTodayDate() {
-        const now = new Date();
-        const text = new Intl.DateTimeFormat("zh-CN", {
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-          weekday: "long"
-        }).format(now);
-
-        refs.todayDateText.textContent = `今天：${text}`;
-      }
-
       function readProfileForm() {
         return normalizeProfile({
-          userId: state.profile?.userId || state.session?.user?.id || null,
-          email: state.session?.user?.email || state.profile?.email || "",
           gender: refs.genderInput.value,
           birthYear: refs.birthYearInput.value,
           heightCm: refs.heightInput.value
@@ -1561,19 +1419,21 @@
         refs.genderInput.value = normalized.gender || "";
         refs.birthYearInput.value = normalized.birthYear == null ? "" : normalized.birthYear;
         refs.heightInput.value = normalized.heightCm == null ? "" : normalized.heightCm;
-        refs.profileEmailText.value =
-          state.mode === "cloud"
-            ? state.session?.user?.email || normalized.email || ""
-            : "本地模式未绑定邮箱";
       }
 
       function readFormRecord() {
         return normalizeRecord({
           recordDate: refs.recordDateInput.value || getTodayISO(),
           weight: refs.weightInput.value,
-          intakeKcal: refs.intakeInput.value,
           extraBurn: refs.extraBurnInput.value,
-          note: refs.noteInput.value
+          note: refs.noteInput.value,
+          weeklyLossRate: refs.weeklyLossRateInput.value,
+          planProtein: refs.planProteinInput.value,
+          planCarb: refs.planCarbInput.value,
+          planFat: refs.planFatInput.value,
+          actualProtein: refs.actualProteinInput.value,
+          actualCarb: refs.actualCarbInput.value,
+          actualFat: refs.actualFatInput.value
         });
       }
 
@@ -1581,31 +1441,135 @@
         const normalized = normalizeRecord(record);
         refs.recordDateInput.value = normalized.recordDate || getTodayISO();
         refs.weightInput.value = normalized.weight == null ? "" : normalized.weight;
-        refs.intakeInput.value = normalized.intakeKcal == null ? "" : normalized.intakeKcal;
         refs.extraBurnInput.value = normalized.extraBurn == null ? "" : normalized.extraBurn;
         refs.noteInput.value = normalized.note || "";
+
+        refs.weeklyLossRateInput.value =
+          normalized.weeklyLossRate == null ? "" : normalized.weeklyLossRate;
+
+        refs.planProteinInput.value = normalized.planProtein == null ? "" : normalized.planProtein;
+        refs.planCarbInput.value = normalized.planCarb == null ? "" : normalized.planCarb;
+        refs.planFatInput.value = normalized.planFat == null ? "" : normalized.planFat;
+
+        refs.actualProteinInput.value = normalized.actualProtein == null ? "" : normalized.actualProtein;
+        refs.actualCarbInput.value = normalized.actualCarb == null ? "" : normalized.actualCarb;
+        refs.actualFatInput.value = normalized.actualFat == null ? "" : normalized.actualFat;
+      }
+
+      function hydrateAutoPlanDefaults() {
+        const record = readFormRecord();
+        const summary = calculateSummary(record, state.profile);
+
+        if (record.planProtein == null && summary.planProtein != null) {
+          refs.planProteinInput.value = Math.round(summary.planProtein);
+        }
+        if (record.planCarb == null && summary.planCarb != null) {
+          refs.planCarbInput.value = Math.round(summary.planCarb);
+        }
+        if (record.planFat == null && summary.planFat != null) {
+          refs.planFatInput.value = Math.round(summary.planFat);
+        }
+        if (record.weeklyLossRate == null) {
+          refs.weeklyLossRateInput.value = String(APP_CONFIG.defaultWeeklyLossRate);
+        }
       }
 
       function calculateSummary(record, profile) {
         const previewRecords = mergeRecordIntoList(state.records, record);
         const latestWeightInfo = getLatestWeightInfo(previewRecords);
+
         const bmr =
           latestWeightInfo && profileComplete(profile)
             ? calculateBmr(profile, latestWeightInfo.weight)
             : null;
 
-        const totalIntake = numberOrZero(record.intakeKcal);
+        const actualProtein = numberOrZero(record.actualProtein);
+        const actualCarb = numberOrZero(record.actualCarb);
+        const actualFat = numberOrZero(record.actualFat);
+        const actualIntake = actualProtein * 4 + actualCarb * 4 + actualFat * 9;
+
         const extraBurn = numberOrZero(record.extraBurn);
         const totalBurn = bmr == null ? null : bmr + extraBurn;
-        const calorieDiff = totalBurn == null ? null : totalIntake - totalBurn;
+        const actualDiff = totalBurn == null ? null : actualIntake - totalBurn;
+
+        const plan = buildMacroPlan({
+          record,
+          latestWeightInfo,
+          bmr,
+          extraBurn
+        });
 
         return {
           latestWeightInfo,
-          totalIntake,
+          actualIntake,
           extraBurn,
           bmr,
           totalBurn,
-          calorieDiff
+          actualDiff,
+          planProtein: plan.planProtein,
+          planCarb: plan.planCarb,
+          planFat: plan.planFat,
+          planCalories: plan.planCalories,
+          targetDeficit: plan.targetDeficit,
+          weeklyLossRate: plan.weeklyLossRate
+        };
+      }
+
+      function buildMacroPlan({ record, latestWeightInfo, bmr, extraBurn }) {
+        const weeklyLossRate = clampNumber(
+          record.weeklyLossRate == null ? APP_CONFIG.defaultWeeklyLossRate : Number(record.weeklyLossRate),
+          0.3,
+          1.2
+        );
+
+        const baseCalories = APP_CONFIG.basePlanCalories;
+        const baseProtein = Math.round((baseCalories * APP_CONFIG.planProteinRatio) / 4);
+        const baseFat = Math.round((baseCalories * APP_CONFIG.planFatRatio) / 9);
+        const baseCarb = Math.round((baseCalories * APP_CONFIG.planCarbRatio) / 4);
+
+        if (!latestWeightInfo || bmr == null) {
+          return {
+            weeklyLossRate,
+            planProtein: record.planProtein ?? baseProtein,
+            planCarb: record.planCarb ?? baseCarb,
+            planFat: record.planFat ?? baseFat,
+            planCalories: null,
+            targetDeficit: null
+          };
+        }
+
+        const weight = latestWeightInfo.weight;
+        const weeklyLossKg = weight * (weeklyLossRate / 100);
+        const targetDeficit = (weeklyLossKg * 7700) / 7;
+        const maintenance = bmr + numberOrZero(extraBurn);
+
+        const fixedCalories = baseProtein * 4 + baseFat * 9;
+        const rawPlanCalories = Math.max(
+          fixedCalories + APP_CONFIG.carbFloor * 4,
+          maintenance - targetDeficit
+        );
+
+        const autoPlanCarb = Math.max(
+          APP_CONFIG.carbFloor,
+          Math.round((rawPlanCalories - fixedCalories) / 4)
+        );
+
+        const planProtein =
+          record.planProtein == null ? baseProtein : Number(record.planProtein);
+        const planFat =
+          record.planFat == null ? baseFat : Number(record.planFat);
+        const planCarb =
+          record.planCarb == null ? autoPlanCarb : Number(record.planCarb);
+
+        const planCalories = planProtein * 4 + planCarb * 4 + planFat * 9;
+
+        return {
+          weeklyLossRate,
+          planProtein,
+          planCarb,
+          planFat,
+          planCalories,
+          targetDeficit
         };
       }
 
@@ -1615,23 +1579,121 @@
         const age = getAgeFromBirthYear(profile);
         if (age == null) return null;
 
-        const weight = Number(latestWeight);
-        const height = Number(profile.heightCm);
-        const genderOffset = profile.gender === "male" ? 5 : -161;
-
-        return 10 * weight + 6.25 * height - 5 * age + genderOffset;
+        const base = 10 * latestWeight + 6.25 * profile.heightCm - 5 * age;
+        return profile.gender === "male" ? base + 5 : base - 161;
       }
 
       function getBmrMissingReason(profile, latestWeightInfo) {
+        if (!profileComplete(profile) && !latestWeightInfo) {
+          return "请完善个人信息并至少记录一次体重";
+        }
         if (!profileComplete(profile)) {
-          return "请先保存性别、出生年、身高";
+          return "请先完善性别、出生年份、身高";
         }
+        return "请至少记录一次体重";
+      }
 
-        if (!latestWeightInfo) {
-          return "请先至少记录一次体重";
+      function createEmptyProfile() {
+        return {
+          gender: "",
+          birthYear: null,
+          heightCm: null
+        };
+      }
+
+      function createEmptyRecord(date) {
+        return {
+          id: null,
+          recordDate: date,
+          weight: null,
+          extraBurn: null,
+          note: "",
+          weeklyLossRate: null,
+          planProtein: null,
+          planCarb: null,
+          planFat: null,
+          actualProtein: null,
+          actualCarb: null,
+          actualFat: null,
+          extraFields: {}
+        };
+      }
+
+      function normalizeProfile(profile) {
+        return {
+          gender: profile?.gender === "male" || profile?.gender === "female" ? profile.gender : "",
+          birthYear: cleanNullableInteger(profile?.birthYear),
+          heightCm: cleanNullableNumber(profile?.heightCm)
+        };
+      }
+
+      function normalizeRecord(record) {
+        const extraFields =
+          record?.extraFields && typeof record.extraFields === "object"
+            ? record.extraFields
+            : record?.extra_fields && typeof record.extra_fields === "object"
+              ? record.extra_fields
+              : {};
+
+        return {
+          id: record?.id || null,
+          recordDate: record?.recordDate || record?.record_date || getTodayISO(),
+          weight: cleanNullableNumber(record?.weight),
+          extraBurn: cleanNullableInteger(
+            record?.extraBurn != null ? record.extraBurn : record?.extra_burn
+          ),
+          note: String(record?.note ?? record?.training ?? "").trim(),
+
+          weeklyLossRate: cleanNullableNumber(
+            record?.weeklyLossRate ?? extraFields.weeklyLossRate ?? APP_CONFIG.defaultWeeklyLossRate
+          ),
+
+          planProtein: cleanNullableInteger(record?.planProtein ?? extraFields.planProtein),
+          planCarb: cleanNullableInteger(record?.planCarb ?? extraFields.planCarb),
+          planFat: cleanNullableInteger(record?.planFat ?? extraFields.planFat),
+
+          actualProtein: cleanNullableInteger(
+            record?.actualProtein ?? extraFields.actualProtein ?? record?.protein
+          ),
+          actualCarb: cleanNullableInteger(
+            record?.actualCarb ?? extraFields.actualCarb ?? record?.carbs
+          ),
+          actualFat: cleanNullableInteger(
+            record?.actualFat ?? extraFields.actualFat ?? record?.fat
+          ),
+
+          extraFields
+        };
+      }
+
+      function profileComplete(profile) {
+        return Boolean(
+          profile &&
+          (profile.gender === "male" || profile.gender === "female") &&
+          Number.isFinite(profile.birthYear) &&
+          Number.isFinite(profile.heightCm)
+        );
+      }
+
+      function getLatestWeightInfo(records) {
+        for (const record of sortRecordsDesc(records)) {
+          if (record.weight != null) {
+            return {
+              recordDate: record.recordDate,
+              weight: record.weight
+            };
+          }
         }
+        return null;
+      }
 
-        return "等待计算";
+      function mergeRecordIntoList(records, record) {
+        const normalized = normalizeRecord(record);
+        const next = records
+          .filter((item) => item.recordDate !== normalized.recordDate)
+          .concat(normalized);
+
+        return sortRecordsDesc(next);
       }
 
       function getRecentSevenDayWeightStats() {
@@ -1653,162 +1715,17 @@
         };
       }
 
-      function getLatestWeightInfo(records) {
-        for (const record of sortRecordsDesc(records)) {
-          if (record.weight != null) {
-            return {
-              weight: record.weight,
-              recordDate: record.recordDate
-            };
-          }
-        }
-        return null;
-      }
-
       function findRecordByDate(date) {
         return state.records.find((item) => item.recordDate === date) || null;
       }
 
-      function createEmptyRecord(date) {
-        return {
-          id: null,
-          recordDate: date,
-          weight: null,
-          intakeKcal: null,
-          extraBurn: null,
-          note: ""
-        };
-      }
-
-      function normalizeRecord(record) {
-        const legacyIntake = deriveLegacyIntake(record);
-
-        return {
-          id: record.id || null,
-          recordDate: record.recordDate || getTodayISO(),
-          weight: cleanNullableNumber(record.weight),
-          intakeKcal: cleanNullableInteger(
-            record.intakeKcal != null ? record.intakeKcal : legacyIntake
-          ),
-          extraBurn: cleanNullableInteger(
-            record.extraBurn != null ? record.extraBurn : record.extra_burn
-          ),
-          note: String(record.note ?? record.training ?? "").trim()
-        };
-      }
-
-      function deriveLegacyIntake(record) {
-        const protein = cleanNullableNumber(record.protein);
-        const carbs = cleanNullableNumber(record.carbs);
-        const fat = cleanNullableNumber(record.fat);
-
-        const total =
-          numberOrZero(protein) * 4 +
-          numberOrZero(carbs) * 4 +
-          numberOrZero(fat) * 9;
-
-        return total > 0 ? Math.round(total) : null;
-      }
-
-      function normalizeProfile(profile) {
-        return {
-          userId: profile.userId || null,
-          email: (profile.email || "").trim(),
-          gender: profile.gender === "male" || profile.gender === "female" ? profile.gender : "",
-          birthYear: cleanNullableInteger(profile.birthYear),
-          heightCm: cleanNullableNumber(profile.heightCm)
-        };
-      }
-
-      function createEmptyProfile(email) {
-        return {
-          userId: null,
-          email: email || "",
-          gender: "",
-          birthYear: null,
-          heightCm: null
-        };
-      }
-
-      function profileComplete(profile) {
-        const currentYear = new Date().getFullYear();
-        return (
-          (profile.gender === "male" || profile.gender === "female") &&
-          Number.isInteger(profile.birthYear) &&
-          profile.birthYear >= 1900 &&
-          profile.birthYear <= currentYear &&
-          typeof profile.heightCm === "number" &&
-          Number.isFinite(profile.heightCm) &&
-          profile.heightCm >= 80 &&
-          profile.heightCm <= 260
-        );
-      }
-
-      function profilesEqual(a, b) {
-        const left = normalizeProfile(a);
-        const right = normalizeProfile(b);
-
-        return (
-          left.gender === right.gender &&
-          left.birthYear === right.birthYear &&
-          left.heightCm === right.heightCm
-        );
-      }
-
-      function getAgeFromBirthYear(profile) {
-        if (!profile || !Number.isInteger(profile.birthYear)) return null;
-        return new Date().getFullYear() - profile.birthYear;
-      }
-
-      function getGenderText(gender) {
-        if (gender === "male") return "男";
-        if (gender === "female") return "女";
-        return "未设置";
-      }
-
-      function isRecordEmpty(record) {
-        return (
-          record.weight == null &&
-          record.intakeKcal == null &&
-          record.extraBurn == null &&
-          !record.note
-        );
-      }
-
-      function mergeRecordIntoList(records, record) {
-        if (!record || !record.recordDate) {
-          return sortRecordsDesc(records);
-        }
-
-        const normalized = normalizeRecord(record);
-        const next = records.filter((item) => item.recordDate !== normalized.recordDate);
-        next.push(normalized);
-        return sortRecordsDesc(next);
-      }
-
-      function saveLocalProfile(profile) {
-        state.profile = normalizeProfile(profile);
-        localStorage.setItem(APP_CONFIG.localProfileKey, JSON.stringify(state.profile));
-      }
-
-      function loadLocalProfile() {
-        try {
-          const raw = localStorage.getItem(APP_CONFIG.localProfileKey);
-          if (!raw) return createEmptyProfile("");
-          return normalizeProfile(JSON.parse(raw));
-        } catch (error) {
-          console.error(error);
-          return createEmptyProfile("");
-        }
-      }
-
       function saveLocalRecord(record) {
         const normalized = normalizeRecord(record);
-        const index = state.records.findIndex((item) => item.recordDate === normalized.recordDate);
+        const existingIndex = state.records.findIndex((item) => item.recordDate === normalized.recordDate);
 
-        if (index >= 0) {
-          state.records[index] = {
-            ...state.records[index],
+        if (existingIndex >= 0) {
+          state.records[existingIndex] = {
+            ...state.records[existingIndex],
             ...normalized
           };
         } else {
@@ -1827,21 +1744,12 @@
         persistLocalRecords();
       }
 
-      function persistLocalRecords() {
-        localStorage.setItem(APP_CONFIG.localRecordsKey, JSON.stringify(state.records));
-      }
-
       function loadLocalRecords() {
         try {
-          const raw =
-            localStorage.getItem(APP_CONFIG.localRecordsKey) ||
-            localStorage.getItem(APP_CONFIG.legacyLocalRecordsKey);
-
+          const raw = localStorage.getItem(APP_CONFIG.localStorageKeyRecords);
           if (!raw) return [];
-
           const parsed = JSON.parse(raw);
           if (!Array.isArray(parsed)) return [];
-
           return sortRecordsDesc(parsed.map(normalizeRecord));
         } catch (error) {
           console.error(error);
@@ -1849,49 +1757,45 @@
         }
       }
 
-      async function loadCloudProfile() {
-        const { data, error } = await state.supabase
-          .from(APP_CONFIG.profilesTable)
-          .select("*")
-          .eq("user_id", state.session.user.id)
-          .maybeSingle();
-
-        if (error) throw error;
-
-        state.profile = data
-          ? fromProfileRow(data)
-          : createEmptyProfile(state.session.user.email || "");
+      function persistLocalRecords() {
+        localStorage.setItem(APP_CONFIG.localStorageKeyRecords, JSON.stringify(state.records));
       }
 
-      async function saveCloudProfile(profile) {
-        const row = toProfileRow(profile);
+      function loadLocalProfile() {
+        try {
+          const raw = localStorage.getItem(APP_CONFIG.localStorageKeyProfile);
+          if (!raw) return createEmptyProfile();
+          return normalizeProfile(JSON.parse(raw));
+        } catch (error) {
+          console.error(error);
+          return createEmptyProfile();
+        }
+      }
 
-        const { error } = await state.supabase
-          .from(APP_CONFIG.profilesTable)
-          .upsert(row, { onConflict: "user_id" });
-
-        if (error) throw error;
-
-        await loadCloudProfile();
+      function persistLocalProfile() {
+        localStorage.setItem(
+          APP_CONFIG.localStorageKeyProfile,
+          JSON.stringify(normalizeProfile(state.profile))
+        );
       }
 
       async function loadCloudRecords() {
         const { data, error } = await state.supabase
-          .from(APP_CONFIG.recordsTable)
+          .from(APP_CONFIG.tableName)
           .select("*")
-          .eq("user_id", state.session.user.id)
           .order("record_date", { ascending: false });
 
         if (error) throw error;
 
         state.records = sortRecordsDesc((data || []).map(fromSupabaseRow));
+        hydrateProfileFromRecords();
       }
 
       async function saveCloudRecord(record) {
         const row = toSupabaseRow(record);
 
         const { error } = await state.supabase
-          .from(APP_CONFIG.recordsTable)
+          .from(APP_CONFIG.tableName)
           .upsert(row, { onConflict: "user_id,record_date" });
 
         if (error) throw error;
@@ -1901,7 +1805,7 @@
 
       async function deleteCloudRecord(date) {
         const { error } = await state.supabase
-          .from(APP_CONFIG.recordsTable)
+          .from(APP_CONFIG.tableName)
           .delete()
           .eq("user_id", state.session.user.id)
           .eq("record_date", date);
@@ -1911,37 +1815,58 @@
         await loadCloudRecords();
       }
 
-      function toProfileRow(profile) {
-        const normalized = normalizeProfile(profile);
-        return {
-          user_id: state.session.user.id,
-          email: state.session.user.email || normalized.email || "",
-          gender: normalized.gender,
-          birth_year: normalized.birthYear,
-          height_cm: normalized.heightCm
-        };
+      function hydrateProfileFromRecords() {
+        const snapshot = getLatestProfileSnapshotFromRecords(state.records);
+        if (!snapshot) return;
+
+        const localProfile = normalizeProfile(state.profile);
+        const shouldApplySnapshot =
+          !profileComplete(localProfile) ||
+          JSON.stringify(localProfile) !== JSON.stringify(normalizeProfile(snapshot));
+
+        if (shouldApplySnapshot) {
+          state.profile = normalizeProfile(snapshot);
+          persistLocalProfile();
+        }
       }
 
-      function fromProfileRow(row) {
-        return normalizeProfile({
-          userId: row.user_id,
-          email: row.email,
-          gender: row.gender,
-          birthYear: row.birth_year,
-          heightCm: row.height_cm
-        });
+      function getLatestProfileSnapshotFromRecords(records) {
+        for (const record of sortRecordsDesc(records)) {
+          const snapshot = record?.extraFields?.profileSnapshot;
+          if (snapshot && typeof snapshot === "object") {
+            const normalized = normalizeProfile(snapshot);
+            if (profileComplete(normalized)) {
+              return normalized;
+            }
+          }
+        }
+        return null;
       }
 
       function toSupabaseRow(record) {
         const normalized = normalizeRecord(record);
+        const normalizedProfile = normalizeProfile(state.profile);
 
         return {
           user_id: state.session.user.id,
           record_date: normalized.recordDate,
           weight: normalized.weight,
-          intake_kcal: normalized.intakeKcal,
+          protein: normalized.actualProtein,
+          carbs: normalized.actualCarb,
+          fat: normalized.actualFat,
           extra_burn: normalized.extraBurn,
-          note: normalized.note,
+          training: normalized.note,
+          extra_fields: {
+            schemaVersion: 2,
+            weeklyLossRate: normalized.weeklyLossRate,
+            planProtein: normalized.planProtein,
+            planCarb: normalized.planCarb,
+            planFat: normalized.planFat,
+            actualProtein: normalized.actualProtein,
+            actualCarb: normalized.actualCarb,
+            actualFat: normalized.actualFat,
+            profileSnapshot: normalizedProfile
+          },
           updated_at: new Date().toISOString()
         };
       }
@@ -1951,18 +1876,83 @@
           id: row.id,
           recordDate: row.record_date,
           weight: row.weight,
-          intakeKcal: row.intake_kcal,
           extraBurn: row.extra_burn,
-          note: row.note,
-          protein: row.protein,
-          carbs: row.carbs,
-          fat: row.fat,
-          training: row.training
+          note: row.note ?? row.training ?? "",
+          actualProtein: row.protein,
+          actualCarb: row.carbs,
+          actualFat: row.fat,
+          extraFields: row.extra_fields || {}
         });
+      }
+
+      function updateStorageBadge() {
+        refs.storageBadge.textContent = state.mode === "cloud" ? "云同步模式" : "本地模式";
+        refs.storageBadge.className = `badge ${state.mode === "cloud" ? "badge-cloud" : "badge-local"}`;
+      }
+
+      function updateAuthCards() {
+        updateStorageBadge();
+
+        const showAuthCard = state.mode === "cloud" && !state.session;
+        const showSessionCard = state.mode === "cloud" && !!state.session;
+
+        refs.authCard.classList.toggle("hidden", !showAuthCard);
+        refs.sessionCard.classList.toggle("hidden", !showSessionCard);
+        refs.sessionEmail.textContent = state.session?.user?.email || "-";
+      }
+
+      function updateActionState() {
+        const hasRecord = Boolean(findRecordByDate(refs.recordDateInput.value || state.selectedDate));
+        const needLogin = state.mode === "cloud" && !state.session;
+
+        refs.saveBtn.disabled = needLogin;
+        refs.deleteBtn.disabled = needLogin || !hasRecord;
+      }
+
+      function updateFootnote() {
+        if (state.mode === "cloud") {
+          refs.footnote.textContent = state.session
+            ? "当前为云同步模式：记录已保存到 Supabase。个人信息快照也会随记录一起写入 extra_fields；首次切到新设备后，先保存一条记录即可把个人信息同步过去。"
+            : "当前为云同步模式：请先登录邮箱后再保存云端数据。未登录时可以查看界面，但不会写入云端。";
+        } else {
+          refs.footnote.textContent =
+            "当前为本地模式：数据只保存在当前浏览器中。要启用跨端同步，请填入 Supabase 配置后重新部署。";
+        }
+      }
+
+      function renderTodayDate() {
+        const now = new Date();
+        const text = new Intl.DateTimeFormat("zh-CN", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+          weekday: "long"
+        }).format(now);
+
+        refs.todayDateText.textContent = `今天：${text}`;
+      }
+
+      function getGenderText(gender) {
+        if (gender === "male") return "男";
+        if (gender === "female") return "女";
+        return "--";
+      }
+
+      function getAgeFromBirthYear(profile) {
+        if (!Number.isFinite(profile?.birthYear)) return null;
+        const currentYear = new Date().getFullYear();
+        const age = currentYear - profile.birthYear;
+        return age >= 0 ? age : null;
       }
 
       function sortRecordsDesc(records) {
         return [...records].sort((a, b) => b.recordDate.localeCompare(a.recordDate));
+      }
+
+      function parseNullableNumber(value) {
+        if (value === "" || value == null) return null;
+        const num = Number(value);
+        return Number.isFinite(num) ? num : null;
       }
 
       function cleanNullableNumber(value) {
@@ -1979,6 +1969,27 @@
 
       function numberOrZero(value) {
         return typeof value === "number" && Number.isFinite(value) ? value : 0;
+      }
+
+      function isRecordEmpty(record) {
+        return (
+          record.weight == null &&
+          record.extraBurn == null &&
+          record.planProtein == null &&
+          record.planCarb == null &&
+          record.planFat == null &&
+          record.actualProtein == null &&
+          record.actualCarb == null &&
+          record.actualFat == null &&
+          !record.note
+        );
+      }
+
+      function clampNumber(value, min, max) {
+        if (!Number.isFinite(value)) return min;
+        if (value < min) return min;
+        if (value > max) return max;
+        return value;
       }
 
       function formatSignedNumber(num) {
@@ -2001,21 +2012,8 @@
         }).format(date);
       }
 
-      function formatDateShort(dateString) {
-        const date = parseISODate(dateString);
-        return new Intl.DateTimeFormat("zh-CN", {
-          month: "numeric",
-          day: "numeric"
-        }).format(date);
-      }
-
-      function formatDateTiny(dateString) {
-        const [year, month, day] = dateString.split("-");
-        return `${month}/${day}`;
-      }
-
       function parseISODate(dateString) {
-        const [year, month, day] = dateString.split("-").map(Number);
+        const [year, month, day] = String(dateString).split("-").map(Number);
         return new Date(year, month - 1, day);
       }
 
@@ -2047,23 +2045,13 @@
         const hash = window.location.hash.startsWith("#")
           ? window.location.hash.slice(1)
           : window.location.hash;
-
         if (!hash) return;
 
         const params = new URLSearchParams(hash);
         const errorDescription = params.get("error_description");
-
         if (errorDescription) {
           showStatus(decodeURIComponent(errorDescription.replace(/\+/g, " ")));
         }
-      }
-
-      function cleanupAuthHashIfNeeded() {
-        const hash = window.location.hash || "";
-        if (!/(access_token|refresh_token|type=|expires_in)/.test(hash)) return;
-
-        const cleanUrl = `${window.location.pathname}${window.location.search}`;
-        window.history.replaceState({}, document.title, cleanUrl);
       }
 
       function isValidEmail(email) {

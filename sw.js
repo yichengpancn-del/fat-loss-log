@@ -1,4 +1,4 @@
-const CACHE_NAME = "fat-loss-log-v4";
+const CACHE_NAME = "fat-loss-log-v5";
 const APP_SHELL = [
   "./",
   "./index.html",
