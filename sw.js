@@ -1,4 +1,4 @@
-const CACHE_NAME = "fat-loss-log-v2";
+const CACHE_NAME = "fat-loss-log-v3";
 const ASSETS = [
   "./",
   "./index.html",
@@ -31,19 +31,24 @@ self.addEventListener("activate", (event) => {
 self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET") return;
 
+  if (event.request.mode === "navigate") {
+    event.respondWith(
+      fetch(event.request).catch(() => caches.match("./index.html"))
+    );
+    return;
+  }
+
   event.respondWith(
     caches.match(event.request).then((cached) => {
       if (cached) return cached;
 
-      return fetch(event.request)
-        .then((response) => {
-          const cloned = response.clone();
-          caches.open(CACHE_NAME).then((cache) => {
-            cache.put(event.request, cloned);
-          });
-          return response;
-        })
-        .catch(() => caches.match("./index.html"));
+      return fetch(event.request).then((response) => {
+        const cloned = response.clone();
+        caches.open(CACHE_NAME).then((cache) => {
+          cache.put(event.request, cloned);
+        });
+        return response;
+      });
     })
   );
 });
