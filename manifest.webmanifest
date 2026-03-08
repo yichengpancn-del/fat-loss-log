@@ -1,21 +1,12 @@
 {
-  "name": "个人减脂记录",
-  "short_name": "减脂记录",
-  "description": "记录体重、营养摄入、训练内容，支持云同步。",
+  "name": "体重与碳水记录",
+  "short_name": "体重碳水",
+  "description": "极简记录体重和每日碳水，支持在线部署与跨端同步。",
+  "lang": "zh-CN",
   "start_url": "./",
+  "scope": "./",
   "display": "standalone",
+  "orientation": "portrait",
   "background_color": "#f6f8fb",
-  "theme_color": "#f6f8fb",
-  "icons": [
-    {
-      "src": "./icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "./icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png"
-    }
-  ]
+  "theme_color": "#f6f8fb"
 }
