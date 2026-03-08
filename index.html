@@ -200,6 +200,10 @@
       border-color: #e2e8f0;
     }
 
+    .hidden {
+      display: none !important;
+    }
+
     .section-head {
       display: flex;
       justify-content: space-between;
@@ -227,7 +231,8 @@
     .calc-grid,
     .macro-plan-grid,
     .stats-grid,
-    .summary-grid {
+    .summary-grid,
+    .macro-kpis {
       display: grid;
       gap: 14px;
     }
@@ -252,6 +257,11 @@
     .macro-plan-grid {
       grid-template-columns: 1fr 1fr;
       margin-top: 14px;
+    }
+
+    .macro-kpis {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      margin-top: 10px;
     }
 
     .form-label {
@@ -331,6 +341,10 @@
       font-size: 28px;
     }
 
+    .macro-kpi-value {
+      font-size: 24px;
+    }
+
     .stat-sub,
     .metric-note,
     .macro-help {
@@ -357,13 +371,6 @@
       font-size: 16px;
     }
 
-    .macro-kpis {
-      display: grid;
-      gap: 10px;
-      grid-template-columns: repeat(2, 1fr);
-      margin-top: 10px;
-    }
-
     .macro-kpi {
       background: #f8fafc;
       border: 1px solid var(--line);
@@ -374,150 +381,68 @@
     .macro-kpi-label {
       margin: 0 0 6px;
       color: var(--muted);
-      font-size: 12px;
-    }
-
-    .macro-kpi-value {
-      margin: 0;
-      font-size: 20px;
-      font-weight: 700;
-      line-height: 1.2;
-    }
-
-    .macro-inline-list {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 8px;
-      margin-top: 12px;
-    }
-
-    .macro-inline-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      min-height: 42px;
-      padding: 0 12px;
-      border-radius: 12px;
-      border: 1px solid var(--line);
-      background: #f8fafc;
-      font-size: 14px;
-      color: #475467;
-    }
-
-    .macro-inline-item strong {
-      color: #111827;
-      font-size: 15px;
-    }
-
-    .primary-btn {
-      color: #fff;
-      background: linear-gradient(180deg, #3772ff 0%, #2563eb 100%);
-      box-shadow: 0 10px 24px rgba(37, 99, 235, 0.22);
-    }
-
-    .secondary-btn {
-      color: #1d4ed8;
-      background: #eff6ff;
-      border: 1px solid #bfdbfe;
-    }
-
-    .danger-btn {
-      color: #fff;
-      background: linear-gradient(180deg, #ef4444 0%, #dc2626 100%);
-      box-shadow: 0 10px 24px rgba(220, 38, 38, 0.18);
-    }
-
-    .hidden {
-      display: none !important;
-    }
-
-    .chart-shell {
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      background: linear-gradient(180deg, #fff 0%, #f8fbff 100%);
-      padding: 12px;
-      overflow: hidden;
-    }
-
-    .chart-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 10px;
-      flex-wrap: wrap;
-    }
-
-    .chart-title {
-      margin: 0;
-      font-size: 16px;
-      font-weight: 700;
-    }
-
-    .chart-subtitle {
-      margin: 4px 0 0;
-      color: var(--muted);
       font-size: 13px;
       line-height: 1.5;
     }
 
-    .chart-legend {
+    .macro-inline {
       display: flex;
       gap: 12px;
       flex-wrap: wrap;
-      color: var(--muted);
+      margin-top: 8px;
+    }
+
+    .macro-inline-item {
+      flex: 1 1 120px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px;
+      background: #f8fafc;
+    }
+
+    .macro-inline-item span {
+      display: block;
       font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 6px;
     }
 
-    .chart-legend-item {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
+    .macro-inline-item strong {
+      font-size: 18px;
+      color: #111827;
     }
 
-    .chart-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 999px;
-      flex: 0 0 10px;
-    }
-
-    .chart-dot-weight {
-      background: #2563eb;
-    }
-
-    .chart-dot-carb {
-      background: #f59e0b;
-    }
-
-    .chart-canvas-wrap {
+    .chart-wrap {
+      position: relative;
       width: 100%;
-      overflow-x: auto;
+      min-height: 320px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at top left, rgba(37, 99, 235, 0.05), transparent 28%),
+        #fff;
     }
 
-    #trendChart {
+    canvas {
       display: block;
       width: 100%;
       height: 320px;
-      border-radius: 12px;
-      background: #ffffff;
     }
 
-    .chart-empty,
     .empty-state {
-      border: 1px dashed var(--line);
-      border-radius: 14px;
-      padding: 24px 16px;
+      display: grid;
+      place-items: center;
       text-align: center;
+      min-height: 320px;
       color: var(--muted);
-      background: #fff;
       line-height: 1.7;
+      padding: 16px;
     }
 
     .history-list {
       display: grid;
-      gap: 10px;
+      gap: 12px;
     }
 
     .history-item {
@@ -525,14 +450,14 @@
       text-align: left;
       padding: 0;
       background: transparent;
-      border: none;
       min-height: auto;
+      border-radius: 16px;
     }
 
     .history-item-inner {
-      background: #fff;
       border: 1px solid var(--line);
       border-radius: 16px;
+      background: #fff;
       padding: 14px;
       transition:
         border-color 0.16s ease,
@@ -540,112 +465,132 @@
         transform 0.16s ease;
     }
 
-    .history-item:hover .history-item-inner {
-      border-color: rgba(37, 99, 235, 0.3);
-      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.05);
-      transform: translateY(-1px);
-    }
-
+    .history-item:hover .history-item-inner,
     .history-item.active .history-item-inner {
-      background: var(--primary-soft);
-      border-color: rgba(37, 99, 235, 0.38);
+      border-color: rgba(37, 99, 235, 0.32);
+      box-shadow: 0 8px 24px rgba(37, 99, 235, 0.08);
+      transform: translateY(-1px);
     }
 
     .history-top {
       display: flex;
+      gap: 10px;
       justify-content: space-between;
       align-items: center;
-      gap: 12px;
       flex-wrap: wrap;
-      margin-bottom: 8px;
     }
 
     .history-date {
-      font-weight: 800;
-      font-size: 16px;
+      font-weight: 700;
+      color: #111827;
     }
 
     .history-chip {
-      display: inline-flex;
-      align-items: center;
       min-height: 28px;
       padding: 0 10px;
       border-radius: 999px;
-      background: #f8fafc;
-      border: 1px solid #e2e8f0;
-      color: #334155;
+      display: inline-flex;
+      align-items: center;
       font-size: 12px;
       font-weight: 700;
+      border: 1px solid transparent;
     }
 
     .history-chip.positive {
-      color: #166534;
-      background: #f0fdf4;
+      background: #ecfdf3;
       border-color: #bbf7d0;
+      color: #065f46;
     }
 
     .history-chip.negative {
-      color: #991b1b;
       background: #fef2f2;
       border-color: #fecaca;
+      color: #991b1b;
     }
 
     .history-chip.neutral {
-      color: #334155;
       background: #f8fafc;
       border-color: #e2e8f0;
+      color: #334155;
     }
 
     .history-meta {
+      margin-top: 10px;
       display: grid;
       gap: 6px;
-      color: #475467;
-      font-size: 13px;
-      line-height: 1.5;
     }
 
     .history-row {
       display: flex;
+      gap: 10px 18px;
       flex-wrap: wrap;
-      gap: 10px;
+      color: #334155;
+      font-size: 13px;
+      line-height: 1.6;
     }
 
     .history-training {
-      margin: 8px 0 0;
+      margin: 10px 0 0;
       color: var(--muted);
       font-size: 13px;
-      line-height: 1.6;
+      line-height: 1.7;
       white-space: pre-wrap;
       word-break: break-word;
     }
 
     .footnote {
-      margin: 18px 2px 0;
+      margin: 18px 4px 0;
       color: var(--muted);
+      line-height: 1.75;
       font-size: 13px;
-      line-height: 1.7;
-      text-align: center;
+    }
+
+    .primary-btn {
+      color: #fff;
+      background: linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%);
+      box-shadow: 0 10px 20px rgba(37, 99, 235, 0.18);
+    }
+
+    .primary-btn:hover:not(:disabled) {
+      box-shadow: 0 14px 26px rgba(37, 99, 235, 0.22);
+    }
+
+    .secondary-btn {
+      color: #1e293b;
+      background: #fff;
+      border: 1px solid var(--line);
+    }
+
+    .danger-btn {
+      color: #fff;
+      background: linear-gradient(180deg, #ef4444 0%, #dc2626 100%);
+      box-shadow: 0 10px 20px rgba(220, 38, 38, 0.16);
+    }
+
+    .full-span {
+      grid-column: 1 / -1;
     }
 
     .status-bar {
       position: fixed;
       left: 50%;
       bottom: 18px;
-      transform: translateX(-50%) translateY(12px);
-      width: min(calc(100vw - 24px), 780px);
-      background: rgba(15, 23, 42, 0.94);
-      color: #fff;
+      transform: translateX(-50%) translateY(16px);
+      min-width: min(92vw, 320px);
+      max-width: min(92vw, 720px);
       padding: 12px 16px;
       border-radius: 14px;
-      box-shadow: 0 16px 36px rgba(15, 23, 42, 0.24);
+      background: rgba(17, 24, 39, 0.92);
+      color: #fff;
+      line-height: 1.5;
       font-size: 14px;
-      line-height: 1.6;
+      box-shadow: 0 14px 30px rgba(15, 23, 42, 0.2);
       opacity: 0;
       pointer-events: none;
       transition:
         opacity 0.18s ease,
         transform 0.18s ease;
-      z-index: 9999;
+      z-index: 99;
     }
 
     .status-bar.show {
@@ -654,17 +599,6 @@
     }
 
     @media (max-width: 860px) {
-      .summary-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-
-      .macro-plan-grid,
-      .calc-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    @media (max-width: 719px) {
       .topbar {
         flex-direction: column;
       }
@@ -674,6 +608,8 @@
       }
 
       .auth-grid,
+      .calc-grid,
+      .macro-plan-grid,
       .stats-grid,
       .summary-grid,
       .macro-kpis {
@@ -746,30 +682,14 @@
       <div class="section-head">
         <div>
           <h2>趋势图</h2>
-          <p>同一张图中查看体重与实际碳水变化。X 轴为日期，左轴为体重，右轴为碳水。</p>
+          <p>同一张图中查看体重与实际碳水变化。X 轴为日期，左轴为体重，右轴为实际碳水。</p>
         </div>
       </div>
-
-      <div class="chart-shell">
-        <div class="chart-head">
-          <div>
-            <p class="chart-title">体重 / 实际碳水趋势</p>
-            <p class="chart-subtitle">蓝线为体重（kg），橙线为实际碳水（g）</p>
-          </div>
-          <div class="chart-legend">
-            <span class="chart-legend-item">
-              <span class="chart-dot chart-dot-weight"></span>
-              <span>体重</span>
-            </span>
-            <span class="chart-legend-item">
-              <span class="chart-dot chart-dot-carb"></span>
-              <span>实际碳水</span>
-            </span>
-          </div>
-        </div>
-        <div id="chartEmpty" class="chart-empty hidden">暂无趋势数据。记录体重或实际碳水后会自动显示。</div>
-        <div class="chart-canvas-wrap">
-          <canvas id="trendChart" width="920" height="320" aria-label="体重与实际碳水趋势图"></canvas>
+      <div class="chart-wrap">
+        <canvas id="trendChart" aria-label="体重与碳水趋势图"></canvas>
+        <div id="chartEmpty" class="empty-state hidden">
+          暂无可绘制的数据。<br />
+          记录体重或实际碳水后会自动展示趋势图。
         </div>
       </div>
     </section>
@@ -777,8 +697,8 @@
     <section class="card">
       <div class="section-head">
         <div>
-          <h2>个人信息</h2>
-          <p>用于自动估算基础代谢与计划热量。基础代谢会按你最近一次记录的体重自动计算。</p>
+          <h2>个人信息与计划基准</h2>
+          <p>基础代谢只用于观察实际消耗；减脂计划按“开始第一周日均总代谢 + 5 / 3 / 2”生成。</p>
         </div>
       </div>
 
@@ -794,27 +714,40 @@
 
         <label class="form-label">
           <span>出生年份</span>
-          <input id="birthYearInput" type="number" inputmode="numeric" placeholder="例如 1995" />
+          <input id="birthYearInput" type="number" inputmode="numeric" step="1" placeholder="例如 1994" />
         </label>
 
         <label class="form-label">
           <span>身高（cm）</span>
-          <input id="heightInput" type="number" inputmode="decimal" placeholder="例如 175" />
+          <input id="heightInput" type="number" inputmode="decimal" step="0.1" placeholder="例如 178" />
         </label>
 
-        <div class="summary-card">
-          <p class="eyebrow">状态</p>
-          <h3 class="metric-value" style="font-size:22px;">个人资料</h3>
-          <p id="profileHint" class="metric-note">请补全性别、出生年份、身高，并至少记录一次体重。</p>
-        </div>
+        <label class="form-label">
+          <span>减脂开始日期</span>
+          <input id="planStartDateInput" type="date" />
+        </label>
+
+        <label class="form-label full-span">
+          <span>减脂开始第一周日均总代谢（kcal）</span>
+          <input
+            id="planStartWeekTdeeInput"
+            type="number"
+            inputmode="decimal"
+            step="1"
+            placeholder="例如 2650"
+          />
+        </label>
       </div>
+
+      <p id="profileHint" class="hint">请补全性别、出生年份、身高，以便计算基础代谢。</p>
+      <p id="planSettingsHint" class="hint">请填写减脂开始日期和开始第一周日均总代谢，系统才会生成周度碳水计划。</p>
     </section>
 
     <section class="card">
       <div class="section-head">
         <div>
-          <h2>每日记录</h2>
-          <p>计划蛋白和脂肪会自动固定；你只需要通过计划减重速度实时看计划碳水变化。实际三大营养素用于计算实际摄入热量。</p>
+          <h2>当日记录</h2>
+          <p>蛋白质与脂肪按 5 / 3 / 2 中的 3 / 2 固定；碳水会按照开始日期起算的周次逐周下调。</p>
         </div>
       </div>
 
@@ -842,7 +775,7 @@
           <input id="weeklyLossRateInput" type="number" inputmode="decimal" step="0.05" placeholder="默认 0.85" />
         </label>
 
-        <label class="form-label">
+        <label class="form-label full-span">
           <span>备注 / 训练内容</span>
           <textarea id="noteInput" placeholder="例如：上肢力量训练 + 30 分钟快走"></textarea>
         </label>
@@ -867,33 +800,38 @@
               <p id="planKcalText" class="macro-kpi-value">--</p>
             </div>
             <div class="macro-kpi">
-              <p class="macro-kpi-label">目标缺口</p>
+              <p class="macro-kpi-label">当前缺口</p>
               <p id="targetDeficitText" class="macro-kpi-value">--</p>
+            </div>
+            <div class="macro-kpi">
+              <p class="macro-kpi-label">当前周次</p>
+              <p id="currentWeekText" class="macro-kpi-value">--</p>
             </div>
           </div>
 
-          <p id="macroPlanHelp" class="macro-help">请先完善个人信息并至少记录一次体重，系统才能按最新体重自动生成计划。</p>
+          <p id="macroPlanHelp" class="macro-help">
+            请先填写“减脂开始日期”“开始第一周日均总代谢”，并至少记录一次体重。
+          </p>
         </section>
 
         <section class="macro-box">
-          <h3>实际三大营养素</h3>
+          <h3>实际营养素</h3>
           <div class="calc-grid">
             <label class="form-label">
               <span>实际蛋白（g）</span>
-              <input id="actualProteinInput" type="number" inputmode="decimal" step="1" placeholder="例如 160" />
+              <input id="actualProteinInput" type="number" inputmode="decimal" step="1" placeholder="例如 150" />
             </label>
 
             <label class="form-label">
               <span>实际碳水（g）</span>
-              <input id="actualCarbInput" type="number" inputmode="decimal" step="1" placeholder="例如 180" />
+              <input id="actualCarbInput" type="number" inputmode="decimal" step="1" placeholder="例如 210" />
             </label>
 
-            <label class="form-label">
+            <label class="form-label full-span">
               <span>实际脂肪（g）</span>
               <input id="actualFatInput" type="number" inputmode="decimal" step="1" placeholder="例如 55" />
             </label>
           </div>
-          <p class="macro-help">实际摄入热量按蛋白 / 碳水 × 4 kcal，脂肪 × 9 kcal 自动计算。</p>
         </section>
       </div>
 
@@ -907,8 +845,12 @@
         <section class="summary-card">
           <p class="eyebrow">基础代谢</p>
           <h3 id="bmrValue" class="metric-value">--</h3>
-          <p id="bmrNote" class="metric-note">完善资料后可计算</p>
-          <div class="macro-inline-list">
+          <p id="bmrNote" class="metric-note">待补全信息</p>
+        </section>
+
+        <section class="summary-card">
+          <p class="eyebrow">固定三大</p>
+          <div class="macro-inline">
             <div class="macro-inline-item">
               <span>固定蛋白</span>
               <strong id="fixedProteinText">--</strong>
@@ -979,12 +921,13 @@
         tableName: "fat_loss_records",
         localStorageKeyRecords: "fat-loss-records-v2",
         localStorageKeyProfile: "fat-loss-profile-v2",
-        swVersion: "20260308-1",
+        localStorageKeyPlanSettings: "fat-loss-plan-settings-v1",
+        swVersion: "20260308-2",
         defaultWeeklyLossRate: 0.85,
-        basePlanCalories: 2700,
+        kcalPerKgLoss: 3350,
         planProteinRatio: 0.30,
-        planCarbRatio: 0.45,
-        planFatRatio: 0.25,
+        planCarbRatio: 0.50,
+        planFatRatio: 0.20,
         carbFloor: 50
       };
 
@@ -1002,6 +945,7 @@
         records: [],
         selectedDate: getTodayISO(),
         profile: createEmptyProfile(),
+        planSettings: createEmptyPlanSettings(),
         toastTimer: null
       };
 
@@ -1018,8 +962,12 @@
         window.setInterval(renderTodayDate, 60 * 1000);
 
         state.profile = loadLocalProfile();
+        state.planSettings = loadLocalPlanSettings();
+
         refs.recordDateInput.value = state.selectedDate;
         writeProfileForm(state.profile);
+        writePlanSettingsForm(state.planSettings);
+
         updateStorageBadge();
         parseAuthErrorFromUrl();
 
@@ -1028,6 +976,8 @@
             await initCloudMode();
           } else {
             state.records = loadLocalRecords();
+            if (!profileComplete(state.profile)) hydrateProfileFromRecords();
+            if (!planSettingsComplete(state.planSettings)) hydratePlanSettingsFromRecords();
             refreshScreen(state.selectedDate);
             updateAuthCards();
           }
@@ -1038,6 +988,9 @@
           state.supabase = null;
           state.session = null;
           state.records = loadLocalRecords();
+
+          if (!profileComplete(state.profile)) hydrateProfileFromRecords();
+          if (!planSettingsComplete(state.planSettings)) hydratePlanSettingsFromRecords();
 
           updateStorageBadge();
           updateAuthCards();
@@ -1068,16 +1021,20 @@
         refs.heightInput = document.getElementById("heightInput");
         refs.profileHint = document.getElementById("profileHint");
 
+        refs.planStartDateInput = document.getElementById("planStartDateInput");
+        refs.planStartWeekTdeeInput = document.getElementById("planStartWeekTdeeInput");
+        refs.planSettingsHint = document.getElementById("planSettingsHint");
+
         refs.recordDateInput = document.getElementById("recordDateInput");
         refs.goTodayBtn = document.getElementById("goTodayBtn");
         refs.weightInput = document.getElementById("weightInput");
         refs.extraBurnInput = document.getElementById("extraBurnInput");
         refs.noteInput = document.getElementById("noteInput");
+        refs.weeklyLossRateInput = document.getElementById("weeklyLossRateInput");
 
         refs.planProteinInput = document.getElementById("planProteinInput");
         refs.planCarbInput = document.getElementById("planCarbInput");
         refs.planFatInput = document.getElementById("planFatInput");
-        refs.weeklyLossRateInput = document.getElementById("weeklyLossRateInput");
 
         refs.actualProteinInput = document.getElementById("actualProteinInput");
         refs.actualCarbInput = document.getElementById("actualCarbInput");
@@ -1085,6 +1042,7 @@
 
         refs.planKcalText = document.getElementById("planKcalText");
         refs.targetDeficitText = document.getElementById("targetDeficitText");
+        refs.currentWeekText = document.getElementById("currentWeekText");
         refs.macroPlanHelp = document.getElementById("macroPlanHelp");
 
         refs.intakeValue = document.getElementById("intakeValue");
@@ -1126,13 +1084,14 @@
           refreshScreen(state.selectedDate);
         });
 
-        [
-          refs.genderInput,
-          refs.birthYearInput,
-          refs.heightInput
-        ].forEach((el) => {
+        [refs.genderInput, refs.birthYearInput, refs.heightInput].forEach((el) => {
           el.addEventListener("input", handleProfileInputChange);
           el.addEventListener("change", handleProfileInputChange);
+        });
+
+        [refs.planStartDateInput, refs.planStartWeekTdeeInput].forEach((el) => {
+          el.addEventListener("input", handlePlanSettingsChange);
+          el.addEventListener("change", handlePlanSettingsChange);
         });
 
         [
@@ -1157,8 +1116,10 @@
         refs.historyList.addEventListener("click", (event) => {
           const trigger = event.target.closest("[data-date]");
           if (!trigger) return;
-          const date = trigger.getAttribute("data-date");
+
+          const date = String(trigger.getAttribute("data-date") || "");
           if (!date) return;
+
           state.selectedDate = date;
           refs.recordDateInput.value = date;
           refreshScreen(date);
@@ -1166,182 +1127,80 @@
         });
       }
 
-      function setupGlobalDebugHandlers() {
-        window.addEventListener("error", (event) => {
-          const message =
-            event?.error?.message ||
-            event?.message ||
-            "未知脚本错误";
-
-          console.error("window error", event?.error || event);
-          if (refs.statusBar) {
-            showStatus("页面脚本错误：" + message);
-          }
-        });
-
-        window.addEventListener("unhandledrejection", (event) => {
-          const reason = event?.reason;
-          const message =
-            reason?.message ||
-            (typeof reason === "string" ? reason : JSON.stringify(reason)) ||
-            "未知异步错误";
-
-          console.error("unhandled promise rejection", reason);
-          if (refs.statusBar) {
-            showStatus("异步初始化错误：" + message);
-          }
-        });
-      }
-
-      function registerServiceWorker() {
-        if (!("serviceWorker" in navigator)) return;
-        if (window.location.protocol === "file:") return;
-
-        window.addEventListener("load", async () => {
-          try {
-            const registration = await navigator.serviceWorker.register(
-              `./sw.js?v=${APP_CONFIG.swVersion}`,
-              { updateViaCache: "none" }
-            );
-            await registration.update();
-
-            navigator.serviceWorker.addEventListener("controllerchange", () => {
-              console.log("service worker controller changed");
-            });
-
-            console.log("service worker registered", registration.scope);
-          } catch (error) {
-            console.error("service worker register failed:", error);
-          }
-        });
-      }
-
-      function handleProfileInputChange() {
-        state.profile = readProfileForm();
-        persistLocalProfile();
-        hydrateAutoPlanDefaults();
-        renderLiveViews(readFormRecord(), state.profile);
-      }
-
-      function handleLivePreview() {
-        hydrateAutoPlanDefaults();
-        renderLiveViews(readFormRecord(), state.profile);
-      }
-
       async function initCloudMode() {
-        try {
-          if (!window.supabase || typeof window.supabase.createClient !== "function") {
-            throw new Error("Supabase SDK 未加载：window.supabase.createClient 不存在");
-          }
-
-          state.supabase = window.supabase.createClient(
-            APP_CONFIG.supabaseUrl,
-            APP_CONFIG.supabaseAnonKey,
-            {
-              auth: {
-                persistSession: true,
-                autoRefreshToken: true,
-                detectSessionInUrl: true
-              }
-            }
-          );
-
-          const sessionResult = await state.supabase.auth.getSession();
-          if (sessionResult.error) {
-            throw sessionResult.error;
-          }
-
-          state.mode = "cloud";
-          state.session = sessionResult.data?.session || null;
-
-          updateStorageBadge();
-          updateAuthCards();
-
-          if (state.session) {
-            await loadCloudRecords();
-          }
-
-          refreshScreen(state.selectedDate);
-
-          state.supabase.auth.onAuthStateChange(async (event, session) => {
-            try {
-              state.session = session || null;
-              updateAuthCards();
-
-              if (event === "SIGNED_OUT") {
-                state.records = [];
-                state.selectedDate = getTodayISO();
-                refs.recordDateInput.value = state.selectedDate;
-                refreshScreen(state.selectedDate);
-                showStatus("已退出登录。");
-                return;
-              }
-
-              if (state.session) {
-                await loadCloudRecords();
-                refreshScreen(state.selectedDate);
-
-                if (event === "SIGNED_IN") {
-                  showStatus("登录成功，云端数据已同步。");
-                }
-              } else {
-                state.records = [];
-                refreshScreen(state.selectedDate);
-              }
-            } catch (error) {
-              console.error("onAuthStateChange handler failed", error);
-              showStatus("登录状态处理失败：" + (error?.message || String(error)));
-            }
-          });
-        } catch (error) {
-          console.error("initCloudMode failed", error);
-
-          state.mode = "local";
-          state.supabase = null;
-          state.session = null;
-          state.records = loadLocalRecords();
-
-          updateStorageBadge();
-          updateAuthCards();
-          refreshScreen(state.selectedDate);
-
-          showStatus("Supabase 初始化失败：" + (error?.message || String(error)) + "；已自动回退到本地模式。");
+        if (!window.supabase?.createClient) {
+          throw new Error("Supabase SDK 加载失败");
         }
+
+        state.supabase = window.supabase.createClient(APP_CONFIG.supabaseUrl, APP_CONFIG.supabaseAnonKey, {
+          auth: {
+            persistSession: true,
+            autoRefreshToken: true,
+            detectSessionInUrl: true
+          }
+        });
+
+        const { data, error } = await state.supabase.auth.getSession();
+        if (error) throw error;
+
+        state.session = data?.session || null;
+        updateAuthCards();
+
+        if (state.session) {
+          await loadCloudRecords();
+        } else {
+          state.records = [];
+        }
+
+        refreshScreen(state.selectedDate);
+
+        state.supabase.auth.onAuthStateChange(async (_event, session) => {
+          try {
+            state.session = session || null;
+            updateAuthCards();
+
+            if (state.session) {
+              await loadCloudRecords();
+            } else {
+              state.records = [];
+            }
+
+            refreshScreen(state.selectedDate);
+          } catch (error) {
+            console.error("auth state change failed", error);
+            showStatus("同步状态更新失败：" + (error?.message || String(error)));
+          }
+        });
       }
 
       async function sendMagicLink() {
         if (!state.supabase) {
-          showStatus("Supabase 尚未初始化。");
+          showStatus("当前未启用云同步配置。");
           return;
         }
 
-        if (window.location.protocol === "file:") {
-          showStatus("云同步登录需要通过 http/https 地址访问页面，请先部署后再登录。");
-          return;
-        }
-
-        const email = refs.emailInput.value.trim();
-        if (!isValidEmail(email)) {
-          showStatus("请输入有效的邮箱地址。");
+        const email = String(refs.emailInput.value || "").trim();
+        if (!email) {
+          showStatus("请先输入邮箱地址。");
+          refs.emailInput.focus();
           return;
         }
 
         refs.sendMagicLinkBtn.disabled = true;
 
         try {
-          const redirectTo = getRedirectUrl();
           const { error } = await state.supabase.auth.signInWithOtp({
             email,
             options: {
-              emailRedirectTo: redirectTo
+              emailRedirectTo: window.location.origin + window.location.pathname
             }
           });
 
           if (error) throw error;
-          showStatus("登录链接已发送，请到邮箱中打开。");
+          showStatus("登录链接已发送，请到邮箱中完成登录。");
         } catch (error) {
           console.error("sendMagicLink failed", error);
-          showStatus(`发送失败：${error?.message || "请稍后再试"}`);
+          showStatus("发送登录链接失败：" + (error?.message || String(error)));
         } finally {
           refs.sendMagicLinkBtn.disabled = false;
         }
@@ -1353,56 +1212,65 @@
         try {
           const { error } = await state.supabase.auth.signOut();
           if (error) throw error;
+
+          state.session = null;
+          state.records = [];
+          updateAuthCards();
+          refreshScreen(state.selectedDate);
+          showStatus("已退出登录。");
         } catch (error) {
           console.error("signOut failed", error);
-          showStatus("退出失败：" + (error?.message || "请稍后再试"));
+          showStatus("退出登录失败：" + (error?.message || String(error)));
         }
       }
 
       async function handleReloadCloudData() {
-        if (state.mode !== "cloud") {
-          state.records = loadLocalRecords();
-          refreshScreen(state.selectedDate);
-          showStatus("当前为本地模式，已重新载入本地数据。");
-          return;
-        }
-
-        if (!state.session) {
-          showStatus("请先登录后再同步云端数据。");
-          return;
-        }
-
-        refs.reloadBtn.disabled = true;
         try {
+          if (state.mode !== "cloud") {
+            state.records = loadLocalRecords();
+            if (!profileComplete(state.profile)) hydrateProfileFromRecords();
+            if (!planSettingsComplete(state.planSettings)) hydratePlanSettingsFromRecords();
+            refreshScreen(state.selectedDate);
+            showStatus("已刷新本地数据。");
+            return;
+          }
+
+          if (!state.session?.user?.id) {
+            showStatus("请先登录后再同步云端数据。");
+            return;
+          }
+
           await loadCloudRecords();
           refreshScreen(state.selectedDate);
-          showStatus("云端数据已重新同步。");
+          showStatus("云端数据已同步完成。");
         } catch (error) {
-          console.error("reload cloud data failed", error);
-          showStatus("同步失败：" + (error?.message || "请稍后再试"));
-        } finally {
-          refs.reloadBtn.disabled = false;
+          console.error("handleReloadCloudData failed", error);
+          showStatus("同步失败：" + (error?.message || String(error)));
         }
       }
 
       async function handleSave() {
+        state.profile = readProfileForm();
+        state.planSettings = readPlanSettingsForm();
+
+        persistLocalProfile();
+        persistLocalPlanSettings();
+
         hydrateAutoPlanDefaults();
         const record = readFormRecord();
 
-        if (state.mode === "cloud" && !state.session) {
-          showStatus("云模式下请先登录邮箱后再保存。");
+        if (isRecordEmpty(record)) {
+          showStatus("当前日期没有可保存的记录内容。");
           return;
         }
-
-        if (isRecordEmpty(record) && !profileComplete(state.profile)) {
-          showStatus("至少填写一项记录，或先完善个人信息。");
-          return;
-        }
-
-        refs.saveBtn.disabled = true;
 
         try {
           if (state.mode === "cloud") {
+            if (!state.session?.user?.id) {
+              showStatus("请先登录后再保存云端数据。");
+              return;
+            }
+
             await saveCloudRecord(record);
             showStatus("已保存到云端。");
           } else {
@@ -1410,52 +1278,862 @@
             showStatus("已保存到本地。");
           }
 
-          state.selectedDate = record.recordDate;
-          refs.recordDateInput.value = record.recordDate;
           refreshScreen(record.recordDate);
         } catch (error) {
           console.error("handleSave failed", error);
-          showStatus("保存失败：" + (error?.message || "请稍后再试"));
-        } finally {
-          refs.saveBtn.disabled = false;
+          showStatus("保存失败：" + (error?.message || String(error)));
         }
       }
 
       async function handleDelete() {
         const date = refs.recordDateInput.value || state.selectedDate;
-        if (!date) return;
-
-        if (state.mode === "cloud" && !state.session) {
-          showStatus("云模式下请先登录邮箱后再删除。");
-          return;
-        }
-
         const existing = findRecordByDate(date);
+
         if (!existing) {
-          showStatus("当前日期没有可删除的记录。");
+          showStatus("当前日期没有已保存记录。");
           return;
         }
-
-        refs.deleteBtn.disabled = true;
 
         try {
           if (state.mode === "cloud") {
+            if (!state.session?.user?.id) {
+              showStatus("请先登录后再删除云端数据。");
+              return;
+            }
+
             await deleteCloudRecord(date);
-            showStatus("云端记录已删除。");
+            showStatus("已删除云端记录。");
           } else {
             deleteLocalRecord(date);
-            showStatus("本地记录已删除。");
+            showStatus("已删除本地记录。");
           }
 
-          state.selectedDate = getTodayISO();
-          refs.recordDateInput.value = state.selectedDate;
-          refreshScreen(state.selectedDate);
+          refreshScreen(date);
         } catch (error) {
           console.error("handleDelete failed", error);
-          showStatus("删除失败：" + (error?.message || "请稍后再试"));
-        } finally {
-          refs.deleteBtn.disabled = false;
+          showStatus("删除失败：" + (error?.message || String(error)));
         }
+      }
+
+      function handleProfileInputChange() {
+        state.profile = readProfileForm();
+        persistLocalProfile();
+        renderLiveViews(readFormRecord(), state.profile);
+      }
+
+      function handlePlanSettingsChange() {
+        state.planSettings = readPlanSettingsForm();
+        persistLocalPlanSettings();
+        hydrateAutoPlanDefaults();
+        renderLiveViews(readFormRecord(), state.profile);
+      }
+
+      function handleLivePreview() {
+        hydrateAutoPlanDefaults();
+        renderLiveViews(readFormRecord(), state.profile);
+      }
+
+      function refreshScreen(date) {
+        const existing = findRecordByDate(date);
+        const record = existing || createEmptyRecord(date);
+
+        writeFormRecord(record);
+        hydrateAutoPlanDefaults();
+        updateAuthCards();
+        renderLiveViews(readFormRecord(), state.profile);
+      }
+
+      function renderLiveViews(record, profile) {
+        renderSummaryCards(record, profile);
+        renderTopBadges(record, profile);
+        renderProfileStatus(profile);
+        renderPlanSettingsStatus(record);
+        renderMacroPlanner(record, profile);
+        renderOverviewCards();
+        renderTrendChart();
+        renderHistoryList();
+        updateActionState();
+        updateFootnote();
+      }
+
+      function renderSummaryCards(record, profile) {
+        const summary = calculateSummary(record, profile);
+
+        refs.intakeValue.textContent = `${Math.round(summary.actualIntake)} kcal`;
+        refs.intakeNote.textContent = "由实际蛋白 / 碳水 / 脂肪自动计算";
+
+        refs.fixedProteinText.textContent =
+          summary.planProtein == null ? "--" : `${Math.round(summary.planProtein)} g`;
+        refs.fixedFatText.textContent =
+          summary.planFat == null ? "--" : `${Math.round(summary.planFat)} g`;
+
+        if (summary.bmr == null) {
+          refs.bmrValue.textContent = "--";
+          refs.bmrNote.textContent = getBmrMissingReason(profile, summary.latestWeightInfo);
+
+          refs.burnValue.textContent = "--";
+          refs.burnNote.textContent = "基础代谢 + 额外消耗";
+
+          refs.diffValue.textContent = "--";
+          refs.diffValue.classList.remove("positive", "negative", "neutral");
+          refs.diffValue.classList.add("neutral");
+          refs.diffNote.textContent = "完善个人信息并至少记录一次体重后可计算";
+          return;
+        }
+
+        refs.bmrValue.textContent = `${Math.round(summary.bmr)} kcal`;
+        refs.bmrNote.textContent = `按 ${formatNumber(summary.latestWeightInfo?.weight, 1)} kg 参考体重估算`;
+
+        refs.burnValue.textContent = `${Math.round(summary.totalBurn)} kcal`;
+        refs.burnNote.textContent = `基础代谢 ${Math.round(summary.bmr)} + 额外消耗 ${Math.round(summary.extraBurn)} kcal`;
+
+        refs.diffValue.textContent = `${formatSignedNumber(Math.round(summary.actualDiff))} kcal`;
+        refs.diffValue.classList.remove("positive", "negative", "neutral");
+
+        if (summary.actualDiff < 0) {
+          refs.diffValue.classList.add("negative");
+          refs.diffNote.textContent = "当前为热量缺口";
+        } else if (summary.actualDiff > 0) {
+          refs.diffValue.classList.add("positive");
+          refs.diffNote.textContent = "当前为热量盈余";
+        } else {
+          refs.diffValue.classList.add("neutral");
+          refs.diffNote.textContent = "当前热量持平";
+        }
+      }
+
+      function renderTopBadges(record, profile) {
+        const summary = calculateSummary(record, profile);
+
+        refs.bmrBadge.textContent =
+          summary.bmr == null ? "基础代谢待完善" : `基础代谢 ${Math.round(summary.bmr)} kcal`;
+
+        refs.profileBadge.textContent = profileComplete(profile)
+          ? `${getGenderText(profile.gender)} / ${getAgeFromBirthYear(profile)} 岁 / ${formatNumber(profile.heightCm, 1)} cm`
+          : "待完善个人信息";
+
+        refs.macroBadge.textContent =
+          summary.planCalories == null
+            ? "计划宏量待生成"
+            : `第 ${summary.currentWeekIndex} 周 / 碳水 ${Math.round(summary.planCarb)} g`;
+      }
+
+      function renderProfileStatus(profile) {
+        if (profileComplete(profile)) {
+          refs.profileHint.textContent = "个人信息已完善。基础代谢会按参考体重自动计算，仅用于观察实际消耗。";
+        } else {
+          refs.profileHint.textContent = "请补全性别、出生年份、身高，并至少记录一次体重。";
+        }
+      }
+
+      function renderPlanSettingsStatus(record) {
+        const settings = state.planSettings;
+        const weeklyLossRate = clampNumber(
+          parseNullableNumber(refs.weeklyLossRateInput.value) ?? APP_CONFIG.defaultWeeklyLossRate,
+          0.2,
+          2.0
+        );
+
+        if (!planSettingsComplete(settings)) {
+          refs.planSettingsHint.textContent =
+            "请填写减脂开始日期和开始第一周日均总代谢，系统才会生成周度碳水计划。";
+          return;
+        }
+
+        const weekIndex = getPlanWeekIndex(settings.startDate, record.recordDate);
+        refs.planSettingsHint.textContent =
+          `当前基准：开始日期 ${formatDateLong(settings.startDate)}，开始第一周日均总代谢 ${Math.round(settings.startWeekTdee)} kcal。固定蛋白 / 脂肪来自 5 / 3 / 2 中的 3 / 2；当前按 ${weeklyLossRate.toFixed(2)}% / 周 递减碳水。`;
+      }
+
+      function renderMacroPlanner(record, profile) {
+        const summary = calculateSummary(record, profile);
+
+        refs.planKcalText.textContent =
+          summary.planCalories == null ? "--" : `${Math.round(summary.planCalories)} kcal`;
+
+        refs.targetDeficitText.textContent =
+          summary.targetDeficit == null ? "--" : `${Math.round(summary.targetDeficit)} kcal`;
+
+        refs.currentWeekText.textContent =
+          summary.currentWeekIndex == null ? "--" : `第 ${summary.currentWeekIndex} 周`;
+
+        if (!planSettingsComplete(state.planSettings)) {
+          refs.macroPlanHelp.textContent =
+            "请先填写减脂开始日期和开始第一周日均总代谢。蛋白 / 脂肪会按 5 / 3 / 2 的 3 / 2 固定，碳水才会开始按周递减。";
+          return;
+        }
+
+        if (!summary.latestWeightInfo) {
+          refs.macroPlanHelp.textContent =
+            "计划基准已设置，但还缺少参考体重。请至少记录一次体重，系统才能按每周减重百分比把热量缺口换算成碳水递减。";
+          return;
+        }
+
+        const baseCarbText =
+          summary.maintenanceCarb == null ? "--" : `${Math.round(summary.maintenanceCarb)} g`;
+
+        const carbDropText =
+          summary.weeklyCarbDrop == null ? "--" : `${formatNumber(summary.weeklyCarbDrop, 1)} g`;
+
+        refs.macroPlanHelp.textContent =
+          `基准总代谢 ${Math.round(summary.planBaseTdee)} kcal；固定蛋白 ${Math.round(summary.planProtein)} g，固定脂肪 ${Math.round(summary.planFat)} g。基准碳水 ${baseCarbText}，每周按目标缺口额外下调约 ${carbDropText}；当前使用参考体重 ${formatNumber(summary.latestWeightInfo.weight, 1)} kg 计算。`;
+      }
+
+      function renderOverviewCards() {
+        const sevenDayStats = getRecentSevenDayWeightStats();
+
+        refs.recordCountText.textContent = String(state.records.length);
+        refs.recordCountSub.textContent =
+          state.records.length > 0
+            ? `最近记录：${formatDateLong(state.records[0].recordDate)}`
+            : "还没有任何记录";
+
+        if (sevenDayStats.count === 0) {
+          refs.avgWeightText.textContent = "--";
+          refs.avgWeightSub.textContent = "最近 7 天暂无体重数据";
+        } else {
+          refs.avgWeightText.textContent = `${sevenDayStats.average.toFixed(1)} kg`;
+          refs.avgWeightSub.textContent = `统计区间：最近 7 天，已记录 ${sevenDayStats.count} 天体重`;
+        }
+      }
+
+      function renderTrendChart() {
+        const canvas = refs.trendChart;
+        const empty = refs.chartEmpty;
+        if (!canvas) return;
+
+        const ctx = canvas.getContext("2d");
+        if (!ctx) return;
+
+        const records = sortRecordsAsc(state.records).filter((record) => {
+          return record.weight != null || record.actualCarb != null;
+        });
+
+        if (records.length === 0) {
+          clearCanvas(ctx, canvas);
+          empty.classList.remove("hidden");
+          canvas.classList.add("hidden");
+          return;
+        }
+
+        empty.classList.add("hidden");
+        canvas.classList.remove("hidden");
+
+        const dpr = window.devicePixelRatio || 1;
+        const cssWidth = canvas.clientWidth || 920;
+        const cssHeight = 320;
+
+        if (
+          canvas.width !== Math.round(cssWidth * dpr) ||
+          canvas.height !== Math.round(cssHeight * dpr)
+        ) {
+          canvas.width = Math.round(cssWidth * dpr);
+          canvas.height = Math.round(cssHeight * dpr);
+        }
+
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.scale(dpr, dpr);
+        ctx.clearRect(0, 0, cssWidth, cssHeight);
+
+        const padding = {
+          top: 20,
+          right: 54,
+          bottom: 44,
+          left: 54
+        };
+
+        const plotWidth = cssWidth - padding.left - padding.right;
+        const plotHeight = cssHeight - padding.top - padding.bottom;
+
+        if (plotWidth <= 0 || plotHeight <= 0) return;
+
+        const labels = records.map((record) => formatChartDate(record.recordDate));
+        const weightValues = records.map((record) => record.weight);
+        const carbValues = records.map((record) => record.actualCarb);
+
+        const weightRange = buildAxisRange(weightValues, 1.2, 2);
+        const carbRange = buildAxisRange(carbValues, 20, 40);
+
+        drawChartGrid(ctx, {
+          cssWidth,
+          cssHeight,
+          padding,
+          plotWidth,
+          plotHeight,
+          leftRange: weightRange,
+          rightRange: carbRange
+        });
+
+        drawAxisLabels(ctx, {
+          labels,
+          padding,
+          plotWidth,
+          plotHeight,
+          leftRange: weightRange,
+          rightRange: carbRange
+        });
+
+        drawSeries(ctx, {
+          values: weightValues,
+          color: "#2563eb",
+          pointColor: "#2563eb",
+          padding,
+          plotWidth,
+          plotHeight,
+          range: weightRange
+        });
+
+        drawSeries(ctx, {
+          values: carbValues,
+          color: "#f59e0b",
+          pointColor: "#f59e0b",
+          padding,
+          plotWidth,
+          plotHeight,
+          range: carbRange
+        });
+
+        drawLegend(ctx, cssWidth);
+        drawAxisTitles(ctx, cssWidth, cssHeight, padding);
+      }
+
+      function drawChartGrid(ctx, options) {
+        const { cssWidth, cssHeight, padding, plotWidth, plotHeight } = options;
+
+        ctx.save();
+        ctx.strokeStyle = "#e5e7eb";
+        ctx.lineWidth = 1;
+
+        for (let i = 0; i <= 4; i += 1) {
+          const y = padding.top + (plotHeight * i) / 4;
+          ctx.beginPath();
+          ctx.moveTo(padding.left, y);
+          ctx.lineTo(cssWidth - padding.right, y);
+          ctx.stroke();
+        }
+
+        ctx.beginPath();
+        ctx.moveTo(padding.left, padding.top);
+        ctx.lineTo(padding.left, cssHeight - padding.bottom);
+        ctx.lineTo(cssWidth - padding.right, cssHeight - padding.bottom);
+        ctx.stroke();
+
+        ctx.restore();
+      }
+
+      function drawAxisLabels(ctx, options) {
+        const { labels, padding, plotWidth, plotHeight, leftRange, rightRange } = options;
+
+        ctx.save();
+        ctx.fillStyle = "#64748b";
+        ctx.font = '12px Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+
+        for (let i = 0; i <= 4; i += 1) {
+          const ratio = i / 4;
+          const y = padding.top + plotHeight * ratio;
+          const leftValue = leftRange.max - (leftRange.max - leftRange.min) * ratio;
+          const rightValue = rightRange.max - (rightRange.max - rightRange.min) * ratio;
+
+          ctx.textAlign = "right";
+          ctx.textBaseline = "middle";
+          ctx.fillText(formatAxisValue(leftValue), padding.left - 8, y);
+
+          ctx.textAlign = "left";
+          ctx.fillText(formatAxisValue(rightValue), padding.left + plotWidth + 8, y);
+        }
+
+        const step = labels.length > 7 ? Math.ceil(labels.length / 6) : 1;
+
+        ctx.textAlign = "center";
+        ctx.textBaseline = "top";
+
+        for (let index = 0; index < labels.length; index += step) {
+          const x = getXByIndex(index, labels.length, padding.left, plotWidth);
+          ctx.fillText(labels[index], x, padding.top + plotHeight + 8);
+        }
+
+        if ((labels.length - 1) % step !== 0) {
+          const lastIndex = labels.length - 1;
+          const x = getXByIndex(lastIndex, labels.length, padding.left, plotWidth);
+          ctx.fillText(labels[lastIndex], x, padding.top + plotHeight + 8);
+        }
+
+        ctx.restore();
+      }
+
+      function drawSeries(ctx, options) {
+        const { values, color, pointColor, padding, plotWidth, plotHeight, range } = options;
+        const points = [];
+
+        values.forEach((value, index) => {
+          if (value == null || !Number.isFinite(value)) return;
+
+          const x = getXByIndex(index, values.length, padding.left, plotWidth);
+          const y = getYByValue(value, range.min, range.max, padding.top, plotHeight);
+          points.push({ x, y });
+        });
+
+        if (points.length === 0) return;
+
+        ctx.save();
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 2.5;
+        ctx.lineJoin = "round";
+        ctx.lineCap = "round";
+        ctx.beginPath();
+
+        points.forEach((point, index) => {
+          if (index === 0) ctx.moveTo(point.x, point.y);
+          else ctx.lineTo(point.x, point.y);
+        });
+
+        ctx.stroke();
+
+        ctx.fillStyle = pointColor;
+        points.forEach((point) => {
+          ctx.beginPath();
+          ctx.arc(point.x, point.y, 3.3, 0, Math.PI * 2);
+          ctx.fill();
+        });
+
+        ctx.restore();
+      }
+
+      function drawLegend(ctx, cssWidth) {
+        const items = [
+          { label: "体重", color: "#2563eb" },
+          { label: "实际碳水", color: "#f59e0b" }
+        ];
+
+        ctx.save();
+        ctx.font = '12px Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+        ctx.textBaseline = "middle";
+        let x = cssWidth - 16;
+
+        for (let i = items.length - 1; i >= 0; i -= 1) {
+          const item = items[i];
+          const textWidth = ctx.measureText(item.label).width;
+          const blockWidth = 12 + 8 + textWidth + 18;
+
+          x -= blockWidth;
+          ctx.fillStyle = item.color;
+          ctx.fillRect(x, 12, 12, 12);
+
+          ctx.fillStyle = "#475569";
+          ctx.fillText(item.label, x + 20, 18);
+        }
+
+        ctx.restore();
+      }
+
+      function drawAxisTitles(ctx, cssWidth, cssHeight, padding) {
+        ctx.save();
+        ctx.fillStyle = "#64748b";
+        ctx.font = '12px Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText("日期", cssWidth / 2, cssHeight - 14);
+
+        ctx.translate(18, cssHeight / 2);
+        ctx.rotate(-Math.PI / 2);
+        ctx.fillText("体重（kg）", 0, 0);
+        ctx.restore();
+
+        ctx.save();
+        ctx.fillStyle = "#64748b";
+        ctx.font = '12px Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+        ctx.translate(cssWidth - 16, cssHeight / 2);
+        ctx.rotate(Math.PI / 2);
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText("实际碳水（g）", 0, 0);
+        ctx.restore();
+      }
+
+      function clearCanvas(ctx, canvas) {
+        const cssWidth = canvas.clientWidth || 920;
+        const cssHeight = 320;
+        ctx.clearRect(0, 0, cssWidth, cssHeight);
+      }
+
+      function renderHistoryList() {
+        if (state.mode === "cloud" && !state.session) {
+          refs.historyList.innerHTML = `
+            <div class="empty-state" style="min-height: 180px;">
+              登录后将显示你的云端历史记录。
+            </div>
+          `;
+          return;
+        }
+
+        if (state.records.length === 0) {
+          refs.historyList.innerHTML = `
+            <div class="empty-state" style="min-height: 180px;">
+              还没有记录。<br />
+              先填写上方表单并保存一条吧。
+            </div>
+          `;
+          return;
+        }
+
+        refs.historyList.innerHTML = state.records
+          .map((record) => {
+            const active = record.recordDate === (refs.recordDateInput.value || state.selectedDate);
+            const summary = calculateSummary(record, state.profile);
+
+            const diffClass =
+              summary.actualDiff == null
+                ? "neutral"
+                : summary.actualDiff < 0
+                  ? "negative"
+                  : summary.actualDiff > 0
+                    ? "positive"
+                    : "neutral";
+
+            const diffText =
+              summary.actualDiff == null
+                ? "--"
+                : `${formatSignedNumber(Math.round(summary.actualDiff))} kcal`;
+
+            const weightText =
+              record.weight == null ? "--" : `${formatNumber(record.weight, 1)} kg`;
+
+            const planText =
+              summary.planCalories == null ? "--" : `${Math.round(summary.planCalories)} kcal`;
+
+            const intakeText = `${Math.round(summary.actualIntake)} kcal`;
+            const burnText =
+              summary.totalBurn == null ? "--" : `${Math.round(summary.totalBurn)} kcal`;
+
+            const weekText =
+              summary.currentWeekIndex == null ? "--" : `第 ${summary.currentWeekIndex} 周`;
+
+            const planCarbText =
+              summary.planCarb == null ? "--" : `${Math.round(summary.planCarb)} g`;
+
+            const noteText = record.note ? escapeHtml(record.note) : "未填写备注";
+
+            return `
+              <button class="history-item ${active ? "active" : ""}" type="button" data-date="${record.recordDate}">
+                <div class="history-item-inner">
+                  <div class="history-top">
+                    <div class="history-date">${formatDateLong(record.recordDate)}</div>
+                    <div class="history-chip ${diffClass}">${diffText}</div>
+                  </div>
+
+                  <div class="history-meta">
+                    <div class="history-row">
+                      <span>体重：${weightText}</span>
+                      <span>计划：${planText}</span>
+                      <span>实际：${intakeText}</span>
+                    </div>
+                    <div class="history-row">
+                      <span>周次：${weekText}</span>
+                      <span>计划碳水：${planCarbText}</span>
+                      <span>减重速度：${formatNumber(numberOrZero(record.weeklyLossRate), 2)}% / 周</span>
+                    </div>
+                    <div class="history-row">
+                      <span>实际三大：P ${numberOrZero(record.actualProtein)} / C ${numberOrZero(record.actualCarb)} / F ${numberOrZero(record.actualFat)}</span>
+                    </div>
+                    <div class="history-row">
+                      <span>额外消耗：${Math.round(numberOrZero(record.extraBurn))} kcal</span>
+                      <span>总消耗：${burnText}</span>
+                    </div>
+                  </div>
+
+                  <p class="history-training">${noteText}</p>
+                </div>
+              </button>
+            `;
+          })
+          .join("");
+      }
+
+      function updateStorageBadge() {
+        refs.storageBadge.classList.remove("badge-local", "badge-cloud");
+        if (state.mode === "cloud") {
+          refs.storageBadge.classList.add("badge-cloud");
+          refs.storageBadge.textContent = "云模式";
+        } else {
+          refs.storageBadge.classList.add("badge-local");
+          refs.storageBadge.textContent = "本地模式";
+        }
+      }
+
+      function updateAuthCards() {
+        const showAuthCard = state.mode === "cloud" && !state.session;
+        const showSessionCard = state.mode === "cloud" && !!state.session;
+
+        refs.authCard.classList.toggle("hidden", !showAuthCard);
+        refs.sessionCard.classList.toggle("hidden", !showSessionCard);
+        refs.sessionEmail.textContent = state.session?.user?.email || "-";
+      }
+
+      function updateActionState() {
+        const hasRecord = Boolean(findRecordByDate(refs.recordDateInput.value || state.selectedDate));
+        const needLogin = state.mode === "cloud" && !state.session;
+
+        refs.saveBtn.disabled = needLogin;
+        refs.deleteBtn.disabled = needLogin || !hasRecord;
+      }
+
+      function updateFootnote() {
+        if (state.mode === "cloud") {
+          refs.footnote.textContent = state.session
+            ? "当前为云同步模式：记录已保存到 Supabase。个人信息与计划基准快照会随记录一起写入 extra_fields；新设备首次登录后，保存一条记录即可把最新设置一并同步过去。"
+            : "当前为云同步模式：请先登录邮箱后再保存云端数据。未登录时可以查看界面，但不会写入云端。";
+        } else {
+          refs.footnote.textContent =
+            "当前为本地模式：数据只保存在当前浏览器中。要启用跨端同步，请填入 Supabase 配置后重新部署。";
+        }
+
+        updateStorageBadge();
+      }
+
+      function hydrateAutoPlanDefaults() {
+        const record = readFormRecord();
+        const summary = calculateSummary(record, state.profile);
+
+        if (record.weeklyLossRate == null) {
+          refs.weeklyLossRateInput.value = String(APP_CONFIG.defaultWeeklyLossRate);
+        }
+
+        refs.planProteinInput.value =
+          summary.planProtein == null ? "" : String(Math.round(summary.planProtein));
+
+        refs.planFatInput.value =
+          summary.planFat == null ? "" : String(Math.round(summary.planFat));
+
+        refs.planCarbInput.value =
+          summary.planCarb == null ? "" : String(Math.round(summary.planCarb));
+      }
+
+      function calculateSummary(record, profile) {
+        const previewRecords = mergeRecordIntoList(state.records, record);
+        const latestWeightInfo = getLatestWeightInfo(previewRecords, record.recordDate);
+
+        const bmr =
+          latestWeightInfo && profileComplete(profile)
+            ? calculateBmr(profile, latestWeightInfo.weight)
+            : null;
+
+        const actualProtein = numberOrZero(record.actualProtein);
+        const actualCarb = numberOrZero(record.actualCarb);
+        const actualFat = numberOrZero(record.actualFat);
+        const actualIntake = actualProtein * 4 + actualCarb * 4 + actualFat * 9;
+
+        const extraBurn = numberOrZero(record.extraBurn);
+        const totalBurn = bmr == null ? null : bmr + extraBurn;
+        const actualDiff = totalBurn == null ? null : actualIntake - totalBurn;
+
+        const plan = buildMacroPlan({
+          record,
+          latestWeightInfo,
+          planSettings: state.planSettings
+        });
+
+        return {
+          latestWeightInfo,
+          actualIntake,
+          extraBurn,
+          bmr,
+          totalBurn,
+          actualDiff,
+          planProtein: plan.planProtein,
+          planCarb: plan.planCarb,
+          planFat: plan.planFat,
+          planCalories: plan.planCalories,
+          targetDeficit: plan.targetDeficit,
+          weeklyLossRate: plan.weeklyLossRate,
+          currentWeekIndex: plan.currentWeekIndex,
+          weeklyCarbDrop: plan.weeklyCarbDrop,
+          maintenanceCarb: plan.maintenanceCarb,
+          planBaseTdee: plan.planBaseTdee
+        };
+      }
+
+      function buildMacroPlan({ record, latestWeightInfo, planSettings }) {
+        const weeklyLossRate = clampNumber(
+          record.weeklyLossRate == null
+            ? APP_CONFIG.defaultWeeklyLossRate
+            : Number(record.weeklyLossRate),
+          0.2,
+          2.0
+        );
+
+        const fallbackProtein = cleanNullableInteger(record.planProtein);
+        const fallbackCarb = cleanNullableInteger(record.planCarb);
+        const fallbackFat = cleanNullableInteger(record.planFat);
+
+        if (!planSettingsComplete(planSettings)) {
+          return {
+            weeklyLossRate,
+            planProtein: fallbackProtein,
+            planCarb: fallbackCarb,
+            planFat: fallbackFat,
+            planCalories:
+              fallbackProtein != null && fallbackCarb != null && fallbackFat != null
+                ? fallbackProtein * 4 + fallbackCarb * 4 + fallbackFat * 9
+                : null,
+            targetDeficit: null,
+            currentWeekIndex: null,
+            weeklyCarbDrop: null,
+            maintenanceCarb: null,
+            planBaseTdee: null
+          };
+        }
+
+        const planBaseTdee = Number(planSettings.startWeekTdee);
+        const planProtein = Math.max(60, Math.round((planBaseTdee * APP_CONFIG.planProteinRatio) / 4));
+        const planFat = Math.max(30, Math.round((planBaseTdee * APP_CONFIG.planFatRatio) / 9));
+        const maintenanceCarb = Math.max(
+          APP_CONFIG.carbFloor,
+          Math.round((planBaseTdee * APP_CONFIG.planCarbRatio) / 4)
+        );
+
+        const currentWeekIndex = getPlanWeekIndex(planSettings.startDate, record.recordDate);
+
+        if (!latestWeightInfo) {
+          return {
+            weeklyLossRate,
+            planProtein,
+            planCarb: fallbackCarb,
+            planFat,
+            planCalories:
+              fallbackCarb != null ? planProtein * 4 + fallbackCarb * 4 + planFat * 9 : null,
+            targetDeficit: null,
+            currentWeekIndex,
+            weeklyCarbDrop: null,
+            maintenanceCarb,
+            planBaseTdee
+          };
+        }
+
+        const referenceWeight = latestWeightInfo.weight;
+        const dailyDeficitPerWeek =
+          (referenceWeight * (weeklyLossRate / 100) * APP_CONFIG.kcalPerKgLoss) / 7;
+
+        const weeklyCarbDrop = dailyDeficitPerWeek / 4;
+
+        const planCarb = Math.max(
+          APP_CONFIG.carbFloor,
+          Math.round(maintenanceCarb - weeklyCarbDrop * currentWeekIndex)
+        );
+
+        const planCalories = planProtein * 4 + planCarb * 4 + planFat * 9;
+        const targetDeficit = Math.max(0, Math.round(planBaseTdee - planCalories));
+
+        return {
+          weeklyLossRate,
+          planProtein,
+          planCarb,
+          planFat,
+          planCalories,
+          targetDeficit,
+          currentWeekIndex,
+          weeklyCarbDrop,
+          maintenanceCarb,
+          planBaseTdee
+        };
+      }
+
+      function calculateBmr(profile, weightKg) {
+        const age = getAgeFromBirthYear(profile);
+        if (!profileComplete(profile) || !Number.isFinite(weightKg) || age == null) return null;
+
+        if (profile.gender === "male") {
+          return 10 * weightKg + 6.25 * profile.heightCm - 5 * age + 5;
+        }
+
+        return 10 * weightKg + 6.25 * profile.heightCm - 5 * age - 161;
+      }
+
+      function getBmrMissingReason(profile, latestWeightInfo) {
+        if (!profileComplete(profile) && !latestWeightInfo) {
+          return "请补全个人信息并至少记录一次体重。";
+        }
+        if (!profileComplete(profile)) {
+          return "请补全性别、出生年份、身高。";
+        }
+        return "请至少记录一次体重。";
+      }
+
+      function renderTodayDate() {
+        const now = new Date();
+        const text = new Intl.DateTimeFormat("zh-CN", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+          weekday: "long"
+        }).format(now);
+
+        refs.todayDateText.textContent = `今天：${text}`;
+      }
+
+      function readProfileForm() {
+        return normalizeProfile({
+          gender: refs.genderInput.value,
+          birthYear: refs.birthYearInput.value,
+          heightCm: refs.heightInput.value
+        });
+      }
+
+      function writeProfileForm(profile) {
+        const normalized = normalizeProfile(profile);
+        refs.genderInput.value = normalized.gender || "";
+        refs.birthYearInput.value = normalized.birthYear == null ? "" : normalized.birthYear;
+        refs.heightInput.value = normalized.heightCm == null ? "" : normalized.heightCm;
+      }
+
+      function readPlanSettingsForm() {
+        return normalizePlanSettings({
+          startDate: refs.planStartDateInput.value,
+          startWeekTdee: refs.planStartWeekTdeeInput.value
+        });
+      }
+
+      function writePlanSettingsForm(settings) {
+        const normalized = normalizePlanSettings(settings);
+        refs.planStartDateInput.value = normalized.startDate || "";
+        refs.planStartWeekTdeeInput.value =
+          normalized.startWeekTdee == null ? "" : normalized.startWeekTdee;
+      }
+
+      function readFormRecord() {
+        return normalizeRecord({
+          recordDate: refs.recordDateInput.value || getTodayISO(),
+          weight: refs.weightInput.value,
+          extraBurn: refs.extraBurnInput.value,
+          note: refs.noteInput.value,
+          weeklyLossRate: refs.weeklyLossRateInput.value,
+          planProtein: refs.planProteinInput.value,
+          planCarb: refs.planCarbInput.value,
+          planFat: refs.planFatInput.value,
+          actualProtein: refs.actualProteinInput.value,
+          actualCarb: refs.actualCarbInput.value,
+          actualFat: refs.actualFatInput.value
+        });
+      }
+
+      function writeFormRecord(record) {
+        const normalized = normalizeRecord(record);
+        refs.recordDateInput.value = normalized.recordDate || getTodayISO();
+        refs.weightInput.value = normalized.weight == null ? "" : normalized.weight;
+        refs.extraBurnInput.value = normalized.extraBurn == null ? "" : normalized.extraBurn;
+        refs.noteInput.value = normalized.note || "";
+
+        refs.weeklyLossRateInput.value =
+          normalized.weeklyLossRate == null ? "" : normalized.weeklyLossRate;
+
+        refs.planProteinInput.value = normalized.planProtein == null ? "" : normalized.planProtein;
+        refs.planCarbInput.value = normalized.planCarb == null ? "" : normalized.planCarb;
+        refs.planFatInput.value = normalized.planFat == null ? "" : normalized.planFat;
+
+        refs.actualProteinInput.value =
+          normalized.actualProtein == null ? "" : normalized.actualProtein;
+        refs.actualCarbInput.value = normalized.actualCarb == null ? "" : normalized.actualCarb;
+        refs.actualFatInput.value = normalized.actualFat == null ? "" : normalized.actualFat;
       }
 
       function createEmptyProfile() {
@@ -1466,9 +2144,18 @@
         };
       }
 
-      function createEmptyRecord(recordDate = getTodayISO()) {
+      function createEmptyPlanSettings() {
+        return {
+          startDate: "",
+          startWeekTdee: null
+        };
+      }
+
+      function createEmptyRecord(date) {
         return normalizeRecord({
-          recordDate,
+          id: null,
+          userId: null,
+          recordDate: date || getTodayISO(),
           weight: null,
           extraBurn: null,
           note: "",
@@ -1491,19 +2178,30 @@
         };
       }
 
+      function normalizePlanSettings(settings) {
+        return {
+          startDate: isValidISODate(settings?.startDate) ? String(settings.startDate) : "",
+          startWeekTdee: cleanNullableNumber(settings?.startWeekTdee)
+        };
+      }
+
       function normalizeRecord(record) {
         const extraFields = parseExtraFields(record?.extraFields ?? record?.extra_fields);
 
         return {
           id: record?.id ?? null,
           userId: record?.userId ?? record?.user_id ?? null,
-          recordDate: String(record?.recordDate ?? record?.record_date ?? getTodayISO()),
+          recordDate: isValidISODate(record?.recordDate ?? record?.record_date)
+            ? String(record?.recordDate ?? record?.record_date)
+            : getTodayISO(),
           weight: cleanNullableNumber(record?.weight),
           extraBurn: cleanNullableNumber(record?.extraBurn ?? record?.extra_burn),
           note: String(record?.note ?? record?.training ?? "").trim(),
 
           weeklyLossRate: cleanNullableNumber(
-            record?.weeklyLossRate ?? extraFields.weeklyLossRate ?? APP_CONFIG.defaultWeeklyLossRate
+            record?.weeklyLossRate ??
+              extraFields.weeklyLossRate ??
+              APP_CONFIG.defaultWeeklyLossRate
           ),
 
           planProtein: cleanNullableInteger(record?.planProtein ?? extraFields.planProtein),
@@ -1527,6 +2225,7 @@
       function parseExtraFields(value) {
         if (!value) return {};
         if (typeof value === "object") return { ...value };
+
         try {
           const parsed = JSON.parse(value);
           return parsed && typeof parsed === "object" ? parsed : {};
@@ -1538,21 +2237,32 @@
       function profileComplete(profile) {
         return Boolean(
           profile &&
-          (profile.gender === "male" || profile.gender === "female") &&
-          Number.isFinite(profile.birthYear) &&
-          Number.isFinite(profile.heightCm)
+            (profile.gender === "male" || profile.gender === "female") &&
+            Number.isFinite(profile.birthYear) &&
+            Number.isFinite(profile.heightCm)
         );
       }
 
-      function getLatestWeightInfo(records) {
+      function planSettingsComplete(settings) {
+        return Boolean(
+          settings &&
+            isValidISODate(settings.startDate) &&
+            Number.isFinite(settings.startWeekTdee)
+        );
+      }
+
+      function getLatestWeightInfo(records, targetDate) {
+        const cutoff = isValidISODate(targetDate) ? targetDate : getTodayISO();
+
         for (const record of sortRecordsDesc(records)) {
-          if (record.weight != null) {
+          if (record.recordDate <= cutoff && record.weight != null) {
             return {
               recordDate: record.recordDate,
               weight: record.weight
             };
           }
         }
+
         return null;
       }
 
@@ -1578,6 +2288,7 @@
         }
 
         const sum = weights.reduce((acc, value) => acc + value, 0);
+
         return {
           count: weights.length,
           average: sum / weights.length
@@ -1648,10 +2359,29 @@
         );
       }
 
+      function loadLocalPlanSettings() {
+        try {
+          const raw = localStorage.getItem(APP_CONFIG.localStorageKeyPlanSettings);
+          if (!raw) return createEmptyPlanSettings();
+          return normalizePlanSettings(JSON.parse(raw));
+        } catch (error) {
+          console.error("loadLocalPlanSettings failed", error);
+          return createEmptyPlanSettings();
+        }
+      }
+
+      function persistLocalPlanSettings() {
+        localStorage.setItem(
+          APP_CONFIG.localStorageKeyPlanSettings,
+          JSON.stringify(normalizePlanSettings(state.planSettings))
+        );
+      }
+
       async function loadCloudRecords() {
         if (!state.supabase) {
           throw new Error("Supabase client 不存在");
         }
+
         if (!state.session?.user?.id) {
           throw new Error("当前没有登录用户");
         }
@@ -1665,7 +2395,12 @@
         if (error) throw error;
 
         state.records = sortRecordsDesc((data || []).map(fromSupabaseRow));
-        hydrateProfileFromRecords();
+
+        if (!profileComplete(state.profile)) hydrateProfileFromRecords();
+        else writeProfileForm(state.profile);
+
+        if (!planSettingsComplete(state.planSettings)) hydratePlanSettingsFromRecords();
+        else writePlanSettingsForm(state.planSettings);
       }
 
       async function saveCloudRecord(record) {
@@ -1703,6 +2438,8 @@
       function toSupabaseRow(record) {
         const normalized = normalizeRecord(record);
         const profile = normalizeProfile(state.profile);
+        const planSettings = normalizePlanSettings(state.planSettings);
+        const summary = calculateSummary(normalized, profile);
 
         return {
           user_id: state.session.user.id,
@@ -1724,7 +2461,14 @@
             actualFat: normalized.actualFat,
             gender: profile.gender,
             birthYear: profile.birthYear,
-            heightCm: profile.heightCm
+            heightCm: profile.heightCm,
+            planStartDate: planSettings.startDate,
+            planStartWeekTdee: planSettings.startWeekTdee,
+            currentWeekIndex: summary.currentWeekIndex,
+            targetDeficit: summary.targetDeficit,
+            maintenanceCarb: summary.maintenanceCarb,
+            weeklyCarbDrop: summary.weeklyCarbDrop,
+            planBaseTdee: summary.planBaseTdee
           }
         };
       }
@@ -1762,763 +2506,81 @@
         }
       }
 
-      function readProfileForm() {
-        return normalizeProfile({
-          gender: refs.genderInput.value,
-          birthYear: refs.birthYearInput.value,
-          heightCm: refs.heightInput.value
-        });
-      }
-
-      function writeProfileForm(profile) {
-        const normalized = normalizeProfile(profile);
-        refs.genderInput.value = normalized.gender || "";
-        refs.birthYearInput.value = normalized.birthYear == null ? "" : normalized.birthYear;
-        refs.heightInput.value = normalized.heightCm == null ? "" : normalized.heightCm;
-      }
-
-      function readFormRecord() {
-        return normalizeRecord({
-          recordDate: refs.recordDateInput.value || getTodayISO(),
-          weight: refs.weightInput.value,
-          extraBurn: refs.extraBurnInput.value,
-          note: refs.noteInput.value,
-          weeklyLossRate: refs.weeklyLossRateInput.value,
-          planProtein: refs.planProteinInput.value,
-          planCarb: refs.planCarbInput.value,
-          planFat: refs.planFatInput.value,
-          actualProtein: refs.actualProteinInput.value,
-          actualCarb: refs.actualCarbInput.value,
-          actualFat: refs.actualFatInput.value
-        });
-      }
-
-      function writeFormRecord(record) {
-        const normalized = normalizeRecord(record);
-        refs.recordDateInput.value = normalized.recordDate || getTodayISO();
-        refs.weightInput.value = normalized.weight == null ? "" : normalized.weight;
-        refs.extraBurnInput.value = normalized.extraBurn == null ? "" : normalized.extraBurn;
-        refs.noteInput.value = normalized.note || "";
-
-        refs.weeklyLossRateInput.value =
-          normalized.weeklyLossRate == null ? "" : normalized.weeklyLossRate;
-
-        refs.planProteinInput.value = normalized.planProtein == null ? "" : normalized.planProtein;
-        refs.planCarbInput.value = normalized.planCarb == null ? "" : normalized.planCarb;
-        refs.planFatInput.value = normalized.planFat == null ? "" : normalized.planFat;
-
-        refs.actualProteinInput.value = normalized.actualProtein == null ? "" : normalized.actualProtein;
-        refs.actualCarbInput.value = normalized.actualCarb == null ? "" : normalized.actualCarb;
-        refs.actualFatInput.value = normalized.actualFat == null ? "" : normalized.actualFat;
-      }
-
-      function hydrateAutoPlanDefaults() {
-        const record = readFormRecord();
-        const summary = calculateSummary(record, state.profile);
-
-        if (record.weeklyLossRate == null) {
-          refs.weeklyLossRateInput.value = String(APP_CONFIG.defaultWeeklyLossRate);
-        }
-
-        refs.planProteinInput.value =
-          summary.planProtein == null ? "" : String(Math.round(summary.planProtein));
-
-        refs.planFatInput.value =
-          summary.planFat == null ? "" : String(Math.round(summary.planFat));
-
-        refs.planCarbInput.value =
-          summary.planCarb == null ? "" : String(Math.round(summary.planCarb));
-      }
-
-      function calculateSummary(record, profile) {
-        const previewRecords = mergeRecordIntoList(state.records, record);
-        const latestWeightInfo = getLatestWeightInfo(previewRecords);
-
-        const bmr =
-          latestWeightInfo && profileComplete(profile)
-            ? calculateBmr(profile, latestWeightInfo.weight)
-            : null;
-
-        const actualProtein = numberOrZero(record.actualProtein);
-        const actualCarb = numberOrZero(record.actualCarb);
-        const actualFat = numberOrZero(record.actualFat);
-        const actualIntake = actualProtein * 4 + actualCarb * 4 + actualFat * 9;
-
-        const extraBurn = numberOrZero(record.extraBurn);
-        const totalBurn = bmr == null ? null : bmr + extraBurn;
-        const actualDiff = totalBurn == null ? null : actualIntake - totalBurn;
-
-        const plan = buildMacroPlan({
-          record,
-          latestWeightInfo,
-          bmr,
-          extraBurn
-        });
-
-        return {
-          latestWeightInfo,
-          actualIntake,
-          extraBurn,
-          bmr,
-          totalBurn,
-          actualDiff,
-          planProtein: plan.planProtein,
-          planCarb: plan.planCarb,
-          planFat: plan.planFat,
-          planCalories: plan.planCalories,
-          targetDeficit: plan.targetDeficit,
-          weeklyLossRate: plan.weeklyLossRate
-        };
-      }
-
-      function buildMacroPlan({ record, latestWeightInfo, bmr, extraBurn }) {
-        const weeklyLossRate = clampNumber(
-          record.weeklyLossRate == null ? APP_CONFIG.defaultWeeklyLossRate : Number(record.weeklyLossRate),
-          0.2,
-          2.0
-        );
-
-        if (!latestWeightInfo || bmr == null) {
-          const fallbackProtein = cleanNullableInteger(record.planProtein);
-          const fallbackCarb = cleanNullableInteger(record.planCarb);
-          const fallbackFat = cleanNullableInteger(record.planFat);
-
-          return {
-            weeklyLossRate,
-            planProtein: fallbackProtein,
-            planCarb: fallbackCarb,
-            planFat: fallbackFat,
-            planCalories:
-              fallbackProtein != null && fallbackCarb != null && fallbackFat != null
-                ? fallbackProtein * 4 + fallbackCarb * 4 + fallbackFat * 9
-                : null,
-            targetDeficit: null
-          };
-        }
-
-        const latestWeight = latestWeightInfo.weight;
-        const targetDeficit = latestWeight * (weeklyLossRate / 100) * 3350 / 7;
-        const baseCalories = APP_CONFIG.basePlanCalories + numberOrZero(extraBurn);
-
-        const planProtein = Math.max(80, Math.round(latestWeight * 2.0));
-        const planFat = Math.max(40, Math.round(latestWeight * 0.7));
-
-        let planCalories = Math.max(1200, baseCalories - targetDeficit);
-        const remaining = planCalories - planProtein * 4 - planFat * 9;
-        const planCarb = Math.max(APP_CONFIG.carbFloor, Math.round(remaining / 4));
-
-        planCalories = planProtein * 4 + planCarb * 4 + planFat * 9;
-
-        return {
-          weeklyLossRate,
-          planProtein,
-          planCarb,
-          planFat,
-          planCalories,
-          targetDeficit
-        };
-      }
-
-      function calculateBmr(profile, weightKg) {
-        const age = getAgeFromBirthYear(profile);
-        if (!profileComplete(profile) || !Number.isFinite(weightKg) || age == null) return null;
-
-        if (profile.gender === "male") {
-          return 10 * weightKg + 6.25 * profile.heightCm - 5 * age + 5;
-        }
-
-        return 10 * weightKg + 6.25 * profile.heightCm - 5 * age - 161;
-      }
-
-      function getBmrMissingReason(profile, latestWeightInfo) {
-        if (!profileComplete(profile) && !latestWeightInfo) {
-          return "请补全个人信息并至少记录一次体重。";
-        }
-        if (!profileComplete(profile)) {
-          return "请补全性别、出生年份、身高。";
-        }
-        return "请至少记录一次体重。";
-      }
-
-      function refreshScreen(date) {
-        const existing = findRecordByDate(date);
-        const record = existing || createEmptyRecord(date);
-
-        writeFormRecord(record);
-        hydrateAutoPlanDefaults();
-        updateAuthCards();
-        renderLiveViews(readFormRecord(), state.profile);
-      }
-
-      function renderLiveViews(record, profile) {
-        renderSummaryCards(record, profile);
-        renderTopBadges(record, profile);
-        renderProfileStatus(profile);
-        renderMacroPlanner(record, profile);
-        renderOverviewCards();
-        renderTrendChart();
-        renderHistoryList();
-        updateActionState();
-        updateFootnote();
-      }
-
-      function renderSummaryCards(record, profile) {
-        const summary = calculateSummary(record, profile);
-
-        refs.intakeValue.textContent = `${Math.round(summary.actualIntake)} kcal`;
-        refs.intakeNote.textContent = "由实际蛋白 / 碳水 / 脂肪自动计算";
-
-        refs.fixedProteinText.textContent =
-          summary.planProtein == null ? "--" : `${Math.round(summary.planProtein)} g`;
-        refs.fixedFatText.textContent =
-          summary.planFat == null ? "--" : `${Math.round(summary.planFat)} g`;
-
-        if (summary.bmr == null) {
-          refs.bmrValue.textContent = "--";
-          refs.bmrNote.textContent = getBmrMissingReason(profile, summary.latestWeightInfo);
-          refs.burnValue.textContent = "--";
-          refs.burnNote.textContent = "基础代谢 + 额外代谢";
-          refs.diffValue.textContent = "--";
-          refs.diffValue.classList.remove("positive", "negative", "neutral");
-          refs.diffValue.classList.add("neutral");
-          refs.diffNote.textContent = "完善个人信息并至少记录一次体重后可计算";
-          return;
-        }
-
-        refs.bmrValue.textContent = `${Math.round(summary.bmr)} kcal`;
-        refs.bmrNote.textContent = `按最新体重 ${formatNumber(summary.latestWeightInfo?.weight, 1)} kg 自动估算`;
-
-        refs.burnValue.textContent = `${Math.round(summary.totalBurn)} kcal`;
-        refs.burnNote.textContent = `基础代谢 ${Math.round(summary.bmr)} + 额外代谢 ${Math.round(summary.extraBurn)} kcal`;
-
-        refs.diffValue.textContent = `${formatSignedNumber(Math.round(summary.actualDiff))} kcal`;
-        refs.diffValue.classList.remove("positive", "negative", "neutral");
-
-        if (summary.actualDiff < 0) {
-          refs.diffValue.classList.add("negative");
-          refs.diffNote.textContent = "当前为热量缺口";
-        } else if (summary.actualDiff > 0) {
-          refs.diffValue.classList.add("positive");
-          refs.diffNote.textContent = "当前为热量盈余";
-        } else {
-          refs.diffValue.classList.add("neutral");
-          refs.diffNote.textContent = "当前热量持平";
-        }
-      }
-
-      function renderTopBadges(record, profile) {
-        const summary = calculateSummary(record, profile);
-
-        refs.bmrBadge.textContent =
-          summary.bmr == null
-            ? "基础代谢待完善"
-            : `基础代谢 ${Math.round(summary.bmr)} kcal`;
-
-        refs.profileBadge.textContent = profileComplete(profile)
-          ? `${getGenderText(profile.gender)} / ${getAgeFromBirthYear(profile)} 岁 / ${formatNumber(profile.heightCm, 1)} cm`
-          : "待完善个人信息";
-
-        refs.macroBadge.textContent =
-          summary.planCalories == null
-            ? "计划宏量待生成"
-            : `计划 ${Math.round(summary.planCalories)} kcal / 实际 ${Math.round(summary.actualIntake)} kcal`;
-      }
-
-      function renderProfileStatus(profile) {
-        if (profileComplete(profile)) {
-          refs.profileHint.textContent = "个人信息已完善。基础代谢会按最新体重自动计算。";
-        } else {
-          refs.profileHint.textContent = "请补全性别、出生年份、身高，并至少记录一次体重。";
-        }
-      }
-
-      function renderMacroPlanner(record, profile) {
-        const summary = calculateSummary(record, profile);
-
-        if (summary.planCalories == null) {
-          refs.planKcalText.textContent = "--";
-          refs.targetDeficitText.textContent = "--";
-          refs.macroPlanHelp.textContent = "请先完善个人信息并至少记录一次体重，系统才能按最新体重自动生成计划。";
-          return;
-        }
-
-        refs.planKcalText.textContent = `${Math.round(summary.planCalories)} kcal`;
-        refs.targetDeficitText.textContent = `${Math.round(summary.targetDeficit)} kcal`;
-        refs.macroPlanHelp.textContent =
-          `固定蛋白 ${Math.round(summary.planProtein)} g，固定脂肪 ${Math.round(summary.planFat)} g；调节“计划减重速度”时只会实时更新碳水。当前按 ${summary.weeklyLossRate.toFixed(2)}% / 周 估算。`;
-      }
-
-      function renderOverviewCards() {
-        const sevenDayStats = getRecentSevenDayWeightStats();
-
-        refs.recordCountText.textContent = String(state.records.length);
-        refs.recordCountSub.textContent =
-          state.records.length > 0
-            ? `最近记录：${formatDateLong(state.records[0].recordDate)}`
-            : "还没有任何记录";
-
-        if (sevenDayStats.count === 0) {
-          refs.avgWeightText.textContent = "--";
-          refs.avgWeightSub.textContent = "最近 7 天暂无体重数据";
-        } else {
-          refs.avgWeightText.textContent = `${sevenDayStats.average.toFixed(1)} kg`;
-          refs.avgWeightSub.textContent = `统计区间：最近 7 天，已记录 ${sevenDayStats.count} 天体重`;
-        }
-      }
-
-      function renderTrendChart() {
-        const canvas = refs.trendChart;
-        const empty = refs.chartEmpty;
-        if (!canvas) return;
-
-        const ctx = canvas.getContext("2d");
-        if (!ctx) return;
-
-        const records = sortRecordsAsc(state.records).filter((record) => {
-          return record.weight != null || record.actualCarb != null;
-        });
-
-        if (records.length === 0) {
-          clearCanvas(ctx, canvas);
-          empty.classList.remove("hidden");
-          canvas.classList.add("hidden");
-          return;
-        }
-
-        empty.classList.add("hidden");
-        canvas.classList.remove("hidden");
-
-        const dpr = window.devicePixelRatio || 1;
-        const cssWidth = canvas.clientWidth || 920;
-        const cssHeight = 320;
-
-        if (canvas.width !== Math.round(cssWidth * dpr) || canvas.height !== Math.round(cssHeight * dpr)) {
-          canvas.width = Math.round(cssWidth * dpr);
-          canvas.height = Math.round(cssHeight * dpr);
-        }
-
-        ctx.setTransform(1, 0, 0, 1, 0, 0);
-        ctx.scale(dpr, dpr);
-        ctx.clearRect(0, 0, cssWidth, cssHeight);
-
-        const padding = {
-          top: 20,
-          right: 52,
-          bottom: 44,
-          left: 52
-        };
-
-        const plotWidth = cssWidth - padding.left - padding.right;
-        const plotHeight = cssHeight - padding.top - padding.bottom;
-
-        if (plotWidth <= 0 || plotHeight <= 0) return;
-
-        const labels = records.map((record) => formatChartDate(record.recordDate));
-        const weightValues = records.map((record) => record.weight);
-        const carbValues = records.map((record) => record.actualCarb);
-
-        const weightRange = buildAxisRange(weightValues, 1.2, 2);
-        const carbRange = buildAxisRange(carbValues, 20, 10);
-
-        drawChartGrid(ctx, {
-          cssWidth,
-          cssHeight,
-          padding,
-          plotWidth,
-          plotHeight,
-          leftRange: weightRange,
-          rightRange: carbRange
-        });
-
-        drawAxisLabels(ctx, {
-          labels,
-          cssWidth,
-          cssHeight,
-          padding,
-          plotWidth,
-          plotHeight,
-          leftRange: weightRange,
-          rightRange: carbRange
-        });
-
-        drawSeries(ctx, {
-          values: weightValues,
-          color: "#2563eb",
-          lineWidth: 2.5,
-          pointsFill: "#2563eb",
-          labels,
-          padding,
-          plotWidth,
-          plotHeight,
-          range: weightRange
-        });
-
-        drawSeries(ctx, {
-          values: carbValues,
-          color: "#f59e0b",
-          lineWidth: 2.5,
-          pointsFill: "#f59e0b",
-          labels,
-          padding,
-          plotWidth,
-          plotHeight,
-          range: carbRange
-        });
-
-        drawAxisTitles(ctx, {
-          cssWidth,
-          cssHeight,
-          padding
-        });
-      }
-
-      function clearCanvas(ctx, canvas) {
-        const cssWidth = canvas.clientWidth || 920;
-        const cssHeight = 320;
-        ctx.clearRect(0, 0, cssWidth, cssHeight);
-      }
-
-      function drawChartGrid(ctx, config) {
-        const { padding, plotWidth, plotHeight } = config;
-        const gridLines = 5;
-
-        ctx.save();
-        ctx.strokeStyle = "#e5e7eb";
-        ctx.lineWidth = 1;
-
-        for (let i = 0; i <= gridLines; i += 1) {
-          const y = padding.top + (plotHeight / gridLines) * i;
-          ctx.beginPath();
-          ctx.moveTo(padding.left, y);
-          ctx.lineTo(padding.left + plotWidth, y);
-          ctx.stroke();
-        }
-
-        ctx.beginPath();
-        ctx.moveTo(padding.left, padding.top);
-        ctx.lineTo(padding.left, padding.top + plotHeight);
-        ctx.lineTo(padding.left + plotWidth, padding.top + plotHeight);
-        ctx.strokeStyle = "#cbd5e1";
-        ctx.stroke();
-        ctx.restore();
-      }
-
-      function drawAxisLabels(ctx, config) {
-        const {
-          labels,
-          padding,
-          plotWidth,
-          plotHeight,
-          leftRange,
-          rightRange
-        } = config;
-
-        ctx.save();
-        ctx.fillStyle = "#667085";
-        ctx.font = "12px Inter, sans-serif";
-
-        const gridLines = 5;
-
-        for (let i = 0; i <= gridLines; i += 1) {
-          const ratio = i / gridLines;
-          const y = padding.top + plotHeight * ratio;
-
-          const leftValue = leftRange.max - (leftRange.max - leftRange.min) * ratio;
-          const rightValue = rightRange.max - (rightRange.max - rightRange.min) * ratio;
-
-          ctx.textAlign = "right";
-          ctx.textBaseline = "middle";
-          ctx.fillText(formatAxisValue(leftValue), padding.left - 8, y);
-
-          ctx.textAlign = "left";
-          ctx.fillText(formatAxisValue(rightValue), padding.left + plotWidth + 8, y);
-        }
-
-        const maxLabelCount = Math.min(labels.length, 6);
-        const indexSet = new Set();
-
-        if (labels.length <= maxLabelCount) {
-          labels.forEach((_, index) => indexSet.add(index));
-        } else {
-          for (let i = 0; i < maxLabelCount; i += 1) {
-            const index = Math.round((labels.length - 1) * (i / (maxLabelCount - 1)));
-            indexSet.add(index);
-          }
-        }
-
-        [...indexSet]
-          .sort((a, b) => a - b)
-          .forEach((index) => {
-            const x = getXByIndex(index, labels.length, padding.left, plotWidth);
-            ctx.textAlign = "center";
-            ctx.textBaseline = "top";
-            ctx.fillText(labels[index], x, padding.top + plotHeight + 8);
+      function hydratePlanSettingsFromRecords() {
+        for (const record of sortRecordsDesc(state.records)) {
+          const extra = record.extraFields || {};
+          const snapshot = normalizePlanSettings({
+            startDate: extra.planStartDate,
+            startWeekTdee: extra.planStartWeekTdee
           });
 
-        ctx.restore();
+          if (planSettingsComplete(snapshot)) {
+            state.planSettings = snapshot;
+            writePlanSettingsForm(snapshot);
+            persistLocalPlanSettings();
+            return;
+          }
+        }
       }
 
-      function drawSeries(ctx, config) {
-        const {
-          values,
-          color,
-          lineWidth,
-          pointsFill,
-          labels,
-          padding,
-          plotWidth,
-          plotHeight,
-          range
-        } = config;
+      function parseAuthErrorFromUrl() {
+        try {
+          const url = new URL(window.location.href);
+          const hashParams = new URLSearchParams((url.hash || "").replace(/^#/, ""));
+          const errorMessage =
+            url.searchParams.get("error_description") ||
+            hashParams.get("error_description") ||
+            url.searchParams.get("error") ||
+            hashParams.get("error");
 
-        const points = values
-          .map((value, index) => {
-            if (value == null || !Number.isFinite(value)) return null;
-            return {
-              x: getXByIndex(index, labels.length, padding.left, plotWidth),
-              y: getYByValue(value, range.min, range.max, padding.top, plotHeight)
-            };
-          })
-          .filter(Boolean);
+          if (!errorMessage) return;
 
-        if (points.length === 0) return;
+          showStatus(decodeURIComponent(String(errorMessage).replace(/\+/g, " ")));
 
-        ctx.save();
-        ctx.strokeStyle = color;
-        ctx.lineWidth = lineWidth;
-        ctx.lineJoin = "round";
-        ctx.lineCap = "round";
-        ctx.beginPath();
+          url.searchParams.delete("error");
+          url.searchParams.delete("error_description");
+          window.history.replaceState({}, document.title, url.pathname + url.search + url.hash);
+        } catch (_error) {
+          // ignore
+        }
+      }
 
-        points.forEach((point, index) => {
-          if (index === 0) {
-            ctx.moveTo(point.x, point.y);
-          } else {
-            ctx.lineTo(point.x, point.y);
+      function registerServiceWorker() {
+        if (!("serviceWorker" in navigator)) return;
+
+        window.addEventListener("load", async () => {
+          try {
+            await navigator.serviceWorker.register(`./sw.js?v=${encodeURIComponent(APP_CONFIG.swVersion)}`);
+          } catch (error) {
+            console.error("service worker register failed", error);
           }
         });
+      }
 
-        ctx.stroke();
-
-        points.forEach((point) => {
-          ctx.beginPath();
-          ctx.fillStyle = pointsFill;
-          ctx.arc(point.x, point.y, 3, 0, Math.PI * 2);
-          ctx.fill();
+      function setupGlobalDebugHandlers() {
+        window.addEventListener("error", (event) => {
+          console.error("window error", event.error || event.message || event);
         });
 
-        ctx.restore();
+        window.addEventListener("unhandledrejection", (event) => {
+          console.error("unhandled rejection", event.reason || event);
+        });
       }
 
-      function drawAxisTitles(ctx, config) {
-        const { cssWidth, cssHeight, padding } = config;
+      function showStatus(message) {
+        const text = String(message || "").trim();
+        if (!text) return;
 
-        ctx.save();
-        ctx.fillStyle = "#475467";
-        ctx.font = "12px Inter, sans-serif";
+        refs.statusBar.textContent = text;
+        refs.statusBar.classList.add("show");
 
-        ctx.textAlign = "left";
-        ctx.textBaseline = "top";
-        ctx.fillText("体重（kg）", padding.left, 2);
-
-        ctx.textAlign = "right";
-        ctx.fillText("碳水（g）", cssWidth - padding.right, 2);
-
-        ctx.textAlign = "center";
-        ctx.fillText("日期", cssWidth / 2, cssHeight - 16);
-
-        ctx.restore();
-      }
-
-      function buildAxisRange(values, paddingValue, minSpan) {
-        const valid = values.filter((value) => value != null && Number.isFinite(value));
-
-        if (valid.length === 0) {
-          return { min: 0, max: minSpan };
+        if (state.toastTimer) {
+          window.clearTimeout(state.toastTimer);
         }
 
-        let min = Math.min(...valid);
-        let max = Math.max(...valid);
-
-        if (min === max) {
-          min -= minSpan / 2;
-          max += minSpan / 2;
-        }
-
-        min -= paddingValue;
-        max += paddingValue;
-
-        if (max - min < minSpan) {
-          const center = (min + max) / 2;
-          min = center - minSpan / 2;
-          max = center + minSpan / 2;
-        }
-
-        return {
-          min,
-          max
-        };
-      }
-
-      function getXByIndex(index, total, left, width) {
-        if (total <= 1) return left + width / 2;
-        return left + (width * index) / (total - 1);
-      }
-
-      function getYByValue(value, min, max, top, height) {
-        if (max === min) return top + height / 2;
-        const ratio = (value - min) / (max - min);
-        return top + height - ratio * height;
-      }
-
-      function sortRecordsAsc(records) {
-        return [...records].sort((a, b) => a.recordDate.localeCompare(b.recordDate));
-      }
-
-      function formatChartDate(dateString) {
-        const date = parseISODate(dateString);
-        const month = String(date.getMonth() + 1).padStart(2, "0");
-        const day = String(date.getDate()).padStart(2, "0");
-        return `${month}-${day}`;
-      }
-
-      function formatAxisValue(value) {
-        if (!Number.isFinite(value)) return "--";
-        if (Math.abs(value) >= 100) return String(Math.round(value));
-        return value.toFixed(1);
-      }
-
-      function renderHistoryList() {
-        if (state.mode === "cloud" && !state.session) {
-          refs.historyList.innerHTML = `
-            <div class="empty-state">
-              登录后将显示你的云端历史记录。
-            </div>
-          `;
-          return;
-        }
-
-        if (state.records.length === 0) {
-          refs.historyList.innerHTML = `
-            <div class="empty-state">
-              还没有记录。<br />
-              先填写上方表单并保存一条吧。
-            </div>
-          `;
-          return;
-        }
-
-        refs.historyList.innerHTML = state.records
-          .map((record) => {
-            const active = record.recordDate === (refs.recordDateInput.value || state.selectedDate);
-            const summary = calculateSummary(record, state.profile);
-
-            const diffClass =
-              summary.actualDiff == null
-                ? "neutral"
-                : summary.actualDiff < 0
-                  ? "negative"
-                  : summary.actualDiff > 0
-                    ? "positive"
-                    : "neutral";
-
-            const diffText =
-              summary.actualDiff == null
-                ? "--"
-                : `${formatSignedNumber(Math.round(summary.actualDiff))} kcal`;
-
-            const weightText =
-              record.weight == null ? "未记体重" : `${record.weight.toFixed(1)} kg`;
-
-            const planText =
-              summary.planCalories == null ? "--" : `${Math.round(summary.planCalories)} kcal`;
-
-            const intakeText = `${Math.round(summary.actualIntake)} kcal`;
-            const burnText =
-              summary.totalBurn == null ? "--" : `${Math.round(summary.totalBurn)} kcal`;
-
-            const noteText = record.note ? escapeHtml(record.note) : "未填写备注";
-
-            return `
-              <button class="history-item ${active ? "active" : ""}" type="button" data-date="${record.recordDate}">
-                <div class="history-item-inner">
-                  <div class="history-top">
-                    <div class="history-date">${formatDateLong(record.recordDate)}</div>
-                    <div class="history-chip ${diffClass}">${diffText}</div>
-                  </div>
-                  <div class="history-meta">
-                    <div class="history-row">
-                      <span>体重：${weightText}</span>
-                      <span>计划：${planText}</span>
-                      <span>实际：${intakeText}</span>
-                    </div>
-                    <div class="history-row">
-                      <span>实际三大：P ${numberOrZero(record.actualProtein)} / C ${numberOrZero(record.actualCarb)} / F ${numberOrZero(record.actualFat)}</span>
-                    </div>
-                    <div class="history-row">
-                      <span>额外消耗：${Math.round(numberOrZero(record.extraBurn))} kcal</span>
-                      <span>总消耗：${burnText}</span>
-                    </div>
-                  </div>
-                  <p class="history-training">${noteText}</p>
-                </div>
-              </button>
-            `;
-          })
-          .join("");
-      }
-
-      function updateStorageBadge() {
-        refs.storageBadge.classList.remove("badge-local", "badge-cloud");
-        if (state.mode === "cloud") {
-          refs.storageBadge.classList.add("badge-cloud");
-          refs.storageBadge.textContent = "云模式";
-        } else {
-          refs.storageBadge.classList.add("badge-local");
-          refs.storageBadge.textContent = "本地模式";
-        }
-      }
-
-      function updateAuthCards() {
-        const showAuthCard = state.mode === "cloud" && !state.session;
-        const showSessionCard = state.mode === "cloud" && !!state.session;
-
-        refs.authCard.classList.toggle("hidden", !showAuthCard);
-        refs.sessionCard.classList.toggle("hidden", !showSessionCard);
-        refs.sessionEmail.textContent = state.session?.user?.email || "-";
-      }
-
-      function updateActionState() {
-        const hasRecord = Boolean(findRecordByDate(refs.recordDateInput.value || state.selectedDate));
-        const needLogin = state.mode === "cloud" && !state.session;
-
-        refs.saveBtn.disabled = needLogin;
-        refs.deleteBtn.disabled = needLogin || !hasRecord;
-      }
-
-      function updateFootnote() {
-        if (state.mode === "cloud") {
-          refs.footnote.textContent = state.session
-            ? "当前为云同步模式：记录已保存到 Supabase。个人信息快照也会随记录一起写入 extra_fields；首次切到新设备后，先保存一条记录即可把个人信息同步过去。"
-            : "当前为云同步模式：请先登录邮箱后再保存云端数据。未登录时可以查看界面，但不会写入云端。";
-        } else {
-          refs.footnote.textContent =
-            "当前为本地模式：数据只保存在当前浏览器中。要启用跨端同步，请填入 Supabase 配置后重新部署。";
-        }
-
-        updateStorageBadge();
-      }
-
-      function renderTodayDate() {
-        const now = new Date();
-        const text = new Intl.DateTimeFormat("zh-CN", {
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-          weekday: "long"
-        }).format(now);
-
-        refs.todayDateText.textContent = `今天：${text}`;
+        state.toastTimer = window.setTimeout(() => {
+          refs.statusBar.classList.remove("show");
+        }, 2600);
       }
 
       function getGenderText(gender) {
@@ -2536,6 +2598,10 @@
 
       function sortRecordsDesc(records) {
         return [...records].sort((a, b) => b.recordDate.localeCompare(a.recordDate));
+      }
+
+      function sortRecordsAsc(records) {
+        return [...records].sort((a, b) => a.recordDate.localeCompare(b.recordDate));
       }
 
       function parseNullableNumber(value) {
@@ -2564,9 +2630,6 @@
         return (
           record.weight == null &&
           record.extraBurn == null &&
-          record.planProtein == null &&
-          record.planCarb == null &&
-          record.planFat == null &&
           record.actualProtein == null &&
           record.actualCarb == null &&
           record.actualFat == null &&
@@ -2601,57 +2664,97 @@
         }).format(date);
       }
 
+      function formatChartDate(dateString) {
+        const date = parseISODate(dateString);
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const day = String(date.getDate()).padStart(2, "0");
+        return `${month}-${day}`;
+      }
+
+      function formatAxisValue(value) {
+        if (!Number.isFinite(value)) return "--";
+        if (Math.abs(value) >= 100) return String(Math.round(value));
+        return value.toFixed(1);
+      }
+
       function parseISODate(dateString) {
         const [year, month, day] = String(dateString).split("-").map(Number);
-        return new Date(year, month - 1, day);
+        return new Date(year, month - 1, day, 12, 0, 0, 0);
+      }
+
+      function isValidISODate(value) {
+        if (!value || typeof value !== "string") return false;
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+        const date = parseISODate(value);
+        return !Number.isNaN(date.getTime());
       }
 
       function getTodayISO() {
-        return toISODate(new Date());
+        return formatDateToISO(new Date());
       }
 
       function getOffsetDateISO(offsetDays) {
         const date = new Date();
         date.setDate(date.getDate() + offsetDays);
-        return toISODate(date);
+        return formatDateToISO(date);
       }
 
-      function toISODate(date) {
+      function formatDateToISO(date) {
         const year = date.getFullYear();
         const month = String(date.getMonth() + 1).padStart(2, "0");
         const day = String(date.getDate()).padStart(2, "0");
         return `${year}-${month}-${day}`;
       }
 
-      function getRedirectUrl() {
-        const url = new URL(window.location.href);
-        url.hash = "";
-        url.search = "";
-        return url.toString();
+      function getDaysBetween(startDate, endDate) {
+        const start = parseISODate(startDate).getTime();
+        const end = parseISODate(endDate).getTime();
+        return Math.floor((end - start) / (24 * 60 * 60 * 1000));
       }
 
-      function parseAuthErrorFromUrl() {
-        const hash = window.location.hash.startsWith("#")
-          ? window.location.hash.slice(1)
-          : window.location.hash;
-
-        if (hash) {
-          const hashParams = new URLSearchParams(hash);
-          const errorDescription = hashParams.get("error_description");
-          if (errorDescription) {
-            showStatus(decodeURIComponent(errorDescription.replace(/\+/g, " ")));
-          }
-        }
-
-        const searchParams = new URLSearchParams(window.location.search);
-        const errorMessage = searchParams.get("error_description") || searchParams.get("error");
-        if (errorMessage) {
-          showStatus(decodeURIComponent(String(errorMessage).replace(/\+/g, " ")));
-        }
+      function getPlanWeekIndex(startDate, currentDate) {
+        if (!isValidISODate(startDate) || !isValidISODate(currentDate)) return null;
+        const diffDays = getDaysBetween(startDate, currentDate);
+        if (diffDays <= 0) return 1;
+        return Math.floor(diffDays / 7) + 1;
       }
 
-      function isValidEmail(email) {
-        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+      function buildAxisRange(values, paddingValue, minSpan) {
+        const valid = values.filter((value) => value != null && Number.isFinite(value));
+
+        if (valid.length === 0) {
+          return { min: 0, max: minSpan };
+        }
+
+        let min = Math.min(...valid);
+        let max = Math.max(...valid);
+
+        if (min === max) {
+          min -= minSpan / 2;
+          max += minSpan / 2;
+        }
+
+        min -= paddingValue;
+        max += paddingValue;
+
+        if (max - min < minSpan) {
+          const center = (min + max) / 2;
+          min = center - minSpan / 2;
+          max = center + minSpan / 2;
+        }
+
+        return { min, max };
+      }
+
+      function getXByIndex(index, total, left, width) {
+        if (total <= 1) return left + width / 2;
+        return left + (width * index) / (total - 1);
+      }
+
+      function getYByValue(value, min, max, top, height) {
+        if (max === min) return top + height / 2;
+        const ratio = (value - min) / (max - min);
+        return top + height - ratio * height;
       }
 
       function escapeHtml(value) {
@@ -2661,15 +2764,6 @@
           .replaceAll(">", "&gt;")
           .replaceAll('"', "&quot;")
           .replaceAll("'", "&#39;");
-      }
-
-      function showStatus(message) {
-        refs.statusBar.textContent = message;
-        refs.statusBar.classList.add("show");
-        window.clearTimeout(state.toastTimer);
-        state.toastTimer = window.setTimeout(() => {
-          refs.statusBar.classList.remove("show");
-        }, 3200);
       }
     })();
   </script>
